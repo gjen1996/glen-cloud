@@ -4,3 +4,7 @@
 	filemode = false
 	symlinks = false
 	ignorecase = true
+[user]
+	name = gjen1996
+	email = 805596378@qq.com
+	signingkey = ""
