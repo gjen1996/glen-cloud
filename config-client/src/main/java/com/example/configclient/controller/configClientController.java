@@ -4,15 +4,18 @@ package com.example.configclient.controller;/**
  * @Description
  */
 
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 /**
  * @author Glen
  * @create 2019/6/17 16:47 
  * @Description
  */
+@RestController
 public class configClientController {
-    @Value("test")
+    @Value("${neo.hello}")
     private String hello;
 
     @RequestMapping("/hello")
