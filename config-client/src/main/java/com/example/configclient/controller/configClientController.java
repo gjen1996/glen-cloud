@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RefreshScope
-
 public class configClientController {
     //@Value("#{remoteSettings['remote.ip']}")
     @Value("${neo.hello}")
