@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RefreshScope
+
 public class configClientController {
-    @Value("${neo.hello}")
+    @Value("#{neo-config-dev['neo.hello']}")
     private String hello;
 
     @RequestMapping("/hello")
