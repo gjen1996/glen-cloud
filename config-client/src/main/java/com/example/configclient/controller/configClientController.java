@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RefreshScope
 
 public class configClientController {
-    @Value("#{neo-config-dev['neo.hello']}")
+    //@Value("#{remoteSettings['remote.ip']}")
+    @Value("${neo.hello}")
     private String hello;
 
     @RequestMapping("/hello")
