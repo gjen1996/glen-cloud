@@ -6,8 +6,9 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
-@EnableDiscoveryClient
+
 @SpringBootApplication
+@EnableDiscoveryClient
 @EnableEurekaClient
 @RefreshScope
 public class ConfigClientApplication {
