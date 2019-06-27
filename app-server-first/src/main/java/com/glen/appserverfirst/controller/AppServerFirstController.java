@@ -19,4 +19,8 @@ public class AppServerFirstController {
     public String test(){
         return "Hello,world，恭喜您调用成功了，这个是appServerFirst,port为：" +port;
     }
+    @RequestMapping("/totest")
+    public String test1(){
+        return "Hello,world，恭喜您调用成功了，这个测试二是appServerFirst,port为：" +port;
+    }
 }
