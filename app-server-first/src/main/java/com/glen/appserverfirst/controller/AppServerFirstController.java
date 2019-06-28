@@ -1,9 +1,8 @@
 package com.glen.appserverfirst.controller;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Glen
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description
  */
 @RestController
+@EnableResourceServer
 public class AppServerFirstController {
     @Value("${server.port}")
     String port;
