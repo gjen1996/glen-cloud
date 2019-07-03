@@ -4,7 +4,7 @@ package com.glen.authorizationserver.config;/**
  * @Description
  */
 
-import com.glen.appcustomerlogin.entity.User;
+import com.glen.authorizationserver.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

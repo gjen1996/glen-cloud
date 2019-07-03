@@ -4,7 +4,7 @@ package com.glen.authorizationserver.config;/**
  * @Description
  */
 
-import com.glen.appcustomerlogin.service.UserServiceDetail;
+import com.glen.authorizationserver.service.UserServiceDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +13,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,26 +31,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserServiceDetail userServiceDetail;
 
     @Override
-    public @Bean
-    AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        AuthenticationManager manager = super.authenticationManagerBean();
+        return manager;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable() //关闭CSRF
-                .exceptionHandling()
-                .authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
+        http.requestMatchers().anyRequest()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**").authenticated()
-                .and()
-                .httpBasic();
+                .antMatchers("/oauth/**").permitAll();
     }
 
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userServiceDetail).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(userServiceDetail).passwordEncoder(passwordEncoder());
     }
 }
 

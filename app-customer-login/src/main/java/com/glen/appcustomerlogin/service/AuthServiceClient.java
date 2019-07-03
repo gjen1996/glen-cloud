@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @create 2019/6/28 11:28 
  * @Description
  */
-@FeignClient(value = "auth-service", fallback = AuthServiceClientFallback.class)
+@FeignClient(value = "auth-server", fallback = AuthServiceClientFallback.class)
 public interface AuthServiceClient {
     @PostMapping("/oauth/token")
     JWT getToken(@RequestHeader("Authorization") String authorization,
