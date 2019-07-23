@@ -6,7 +6,9 @@ package com.glen.appcustomerlogin.service;/**
 
 import com.glen.appcustomerlogin.entity.JWT;
 import com.glen.appcustomerlogin.service.impl.AuthServiceClientFallback;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,4 +25,5 @@ public interface AuthServiceClient {
                  @RequestParam("grant_type") String type,
                  @RequestParam("username") String username,
                  @RequestParam("password") String password);
+
 }
