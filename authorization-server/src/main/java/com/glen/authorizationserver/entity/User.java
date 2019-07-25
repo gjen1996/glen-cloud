@@ -1,5 +1,6 @@
 package com.glen.authorizationserver.entity;
 
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
