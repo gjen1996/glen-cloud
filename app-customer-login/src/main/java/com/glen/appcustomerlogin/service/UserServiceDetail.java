@@ -12,6 +12,7 @@ import com.glen.appcustomerlogin.exception.UserLoginException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
@@ -49,6 +50,10 @@ import java.util.Collections;
 @Service
 @Slf4j
 public class UserServiceDetail {
+    @Value("${security.oauth2.client.client-id}")
+    String clientId;
+    @Value("${security.oauth2.client.client-secret}")
+    String secret;
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
@@ -59,7 +64,7 @@ public class UserServiceDetail {
 
     @Autowired(required=false)
     private OAuth2ProtectedResourceDetails oAuth2ProtectedResourceDetails;
-    @Autowired
+
     private AuthServiceClient client;
     @Bean
     public RestTemplate restTemplate() {
@@ -87,11 +92,10 @@ public class UserServiceDetail {
         if(!BPwdEncoderUtil.matches(password,user.getPassword())){
             throw new UserLoginException("error password");
         }
-        log.info("daozhelile1");
         // 从auth-service获取JWT
-//        String client_secret = "app-customer-login"+":"+"123456";
+        String client_secret = clientId+":"+secret;
 //
-//        client_secret = "Basic "+Base64.getEncoder().encodeToString(client_secret.getBytes());
+        client_secret = "Basic "+Base64.getEncoder().encodeToString(client_secret.getBytes());
 //        HttpHeaders httpHeaders = new HttpHeaders();
 //        httpHeaders.set("Authorization",client_secret);
 //        log.info("client_secret"+client_secret+"--"+oAuth2ClientProperties.getClientId()+"--"+oAuth2ClientProperties.getClientSecret());
@@ -109,9 +113,9 @@ public class UserServiceDetail {
 //        //获取 Token
 //        ResponseEntity<OAuth2AccessToken> responseEntity=restTemplate.exchange(oAuth2ProtectedResourceDetails.getAccessTokenUri(), HttpMethod.POST,httpEntity, OAuth2AccessToken.class);
 //        log.info("responseEntity;"+responseEntity);
-
-//        JWT jwt = client.getToken(client_secret,"password", username, password);
-        JWT jwt = client.getToken("Basic dXNlci1zZXJ2aWNlOjEyMzQ1Ng==","password", username, password);
+          log.info("client_secret"+client_secret);
+          JWT jwt = client.getToken(client_secret,"password", username, password);
+     //   JWT jwt = client.getToken("Basic dXNlci1zZXJ2aWNlOjEyMzQ1Ng==","password", username, password);
         log.info("jwt"+jwt);
         if(jwt == null){
             throw new UserLoginException("error internal");

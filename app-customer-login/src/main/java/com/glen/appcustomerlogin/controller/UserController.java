@@ -40,7 +40,7 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
-@RequestMapping("/user")
+//@RequestMapping("/user")
 @RestController
 @Slf4j
 public class UserController {

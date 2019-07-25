@@ -81,6 +81,7 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
         log.info("jwtAccessTokenConverter privateKey ：" + privateKey);
         converter.setSigningKey(privateKey);
         converter.setVerifierKey(publicKey);
+       // converter.setSigningKey("test-secret");
         return converter;
     }
 
@@ -93,27 +94,18 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 //       String finalSecret =new BCryptPasswordEncoder().encode("123456");
-//        clients.inMemory()
-//                // 配置一个客户端
-//                .withClient("user-service")
-//                .secret(finalSecret)
-//                // 配置客户端的域
-//                .scopes("all","read", "write")
-//                // 配置验证类型为refresh_token和password
-//                .authorizedGrantTypes("refresh_token","password")
-//                // 配置token的过期时间为1h
-//                .accessTokenValiditySeconds(3600 * 1000)
-//                .authorizedGrantTypes("client_credentials")
-//                .and()
-//                .withClient("client_2")
-//                .authorizedGrantTypes("password", "refresh_token")
-//                .scopes("all","read", "write")
-//                .accessTokenValiditySeconds(7200)
-//                .refreshTokenValiditySeconds(10000)
-//                .authorities("password")
-//                .secret(finalSecret);
+        clients.inMemory()
+                // 配置一个客户端
+                .withClient("user-service")
+                .secret("123456")
+                // 配置客户端的域
+                .scopes("service")
+                // 配置验证类型为refresh_token和password
+                .authorizedGrantTypes("refresh_token","password")
+                // 配置token的过期时间为1h
+                .accessTokenValiditySeconds(3600 * 1000);
 
-        clients.withClientDetails(clientDetailsService);
+//        clients.withClientDetails(clientDetailsService);
 
     }
 
@@ -135,7 +127,8 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         // 允许表单认证
-        security.allowFormAuthenticationForClients().tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()");
+        security.tokenKeyAccess("permitAll()") //url:/oauth/token_key,exposes public key for token verification if using JWT tokens
+                .checkTokenAccess("isAuthenticated()") //url:/oauth/check_token allow check token
+                .allowFormAuthenticationForClients();
     }
 }

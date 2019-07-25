@@ -50,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.requestMatchers().anyRequest()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/oauth/**").permitAll();
+                .antMatchers("/oauth/token","/oauth/**").permitAll();
     }
 
     @Autowired
@@ -58,13 +58,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        //可以设置内存指定的登录的账号密码,指定角色
-        //不加.passwordEncoder(new MyPasswordEncoder())
-        //就不是以明文的方式进行匹配，会报错
-        auth.inMemoryAuthentication().withUser("admin").password("123456").roles("ADMIN");
-        //.passwordEncoder(new MyPasswordEncoder())。
-        //这样，页面提交时候，密码以明文的方式进行匹配。
-        auth.inMemoryAuthentication().passwordEncoder(new BPwdEncoderUtil()).withUser("cxh").password("cxh").roles("ADMIN");
+//        //可以设置内存指定的登录的账号密码,指定角色
+//        //不加.passwordEncoder(new MyPasswordEncoder())
+//        //就不是以明文的方式进行匹配，会报错
+//        auth.inMemoryAuthentication().withUser("admin").password("123456").roles("ADMIN");
+//        //.passwordEncoder(new MyPasswordEncoder())。
+//        //这样，页面提交时候，密码以明文的方式进行匹配。
+//        auth.inMemoryAuthentication().passwordEncoder(new BPwdEncoderUtil()).withUser("cxh").password("cxh").roles("ADMIN");
         auth.userDetailsService(userServiceDetail).passwordEncoder(passwordEncoder());
         log.info("---鉴权"+auth.userDetailsService(userServiceDetail).passwordEncoder(passwordEncoder()));
     }
