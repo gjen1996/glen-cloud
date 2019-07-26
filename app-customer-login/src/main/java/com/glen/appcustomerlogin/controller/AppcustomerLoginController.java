@@ -1,71 +1,59 @@
-package com.glen.appcustomerlogin.controller;
-
-import com.glen.appcustomerlogin.entity.User;
-import com.glen.appcustomerlogin.entity.UserLoginDTO;
-import com.glen.appcustomerlogin.service.UserServiceDetail;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
-import java.util.UUID;
+package com.glen.appcustomerlogin.controller;/**
+ * @author Glen
+ * @create 2019- 07-2019/7/9-17:21
+ * @Description
+ */
 
 /**
  * @author Glen
- * @create 2019- 06-2019/6/24-16:32
+ * @create 2019/7/9 17:21
  * @Description
  */
+import com.glen.appcustomerlogin.config.BPwdEncoderUtil;
+import com.glen.appcustomerlogin.entity.User;
+import com.glen.appcustomerlogin.entity.UserLoginDTO;
+import com.glen.appcustomerlogin.service.UserRepository;
+import com.glen.appcustomerlogin.service.UserServiceDetail;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.*;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.error.DefaultWebResponseExceptionTranslator;
+import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.List;
+
+@RequestMapping("/user")
 @RestController
-@EnableResourceServer
 @Slf4j
-@RequestMapping("/user1")
 public class AppcustomerLoginController {
     @Autowired
     UserServiceDetail userServiceDetail;
-    @Value("${server.port}")
-    String port;
 
-    @RequestMapping("/test")
-    public String test(HttpServletRequest request) {
-        return "Hello,world，恭喜您调用成功了，这个是appServerFirst,port为：" + port;
+    @RequestMapping("/login")
+    public ResponseEntity<OAuth2AccessToken> login(@Valid User loginDto, BindingResult bindingResult,HttpServletResponse response) throws Exception {
+        return userServiceDetail.login(loginDto,bindingResult,response);
     }
-
-    @RequestMapping("/totest")
-    public String test1() {
-        return "Hello,world，恭喜您调用成功了，这个测试二是appServerFirst,port为：" + port;
-    }
-
-
-
     @PostMapping("/register")
     public User postUser(@RequestParam("username") String username,
                          @RequestParam("password") String password) {
         return userServiceDetail.insertUser(username, password);
-    }
-
-    @PostMapping("/login")
-    public UserLoginDTO  login(@RequestParam("username") String username,
-                                                   @RequestParam("password") String password) {
-        log.info("login_username---password"+username+"---"+password);
-        return userServiceDetail.login(username, password);
-    }
-
-    @RequestMapping(value = "/foo", method = RequestMethod.GET)
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public String getFoo() {
-        return "i'm foo, " + UUID.randomUUID().toString();
     }
 }

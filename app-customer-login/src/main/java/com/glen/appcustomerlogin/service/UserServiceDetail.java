@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
@@ -29,8 +26,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -50,26 +49,32 @@ import java.util.Collections;
 @Service
 @Slf4j
 public class UserServiceDetail {
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private OAuth2ClientProperties oAuth2ClientProperties;
+
+    @Autowired
+    OAuth2ProtectedResourceDetails oAuth2ProtectedResourceDetails;
+    @Autowired
+    UserServiceDetail userServiceDetail;
+    @Value("${security.oauth2.client.grant-type}")
+    String grantType;
+    @Value("${security.oauth2.client.scope}")
+    String scope;
+    @Value("${security.oauth2.client.access-token-uri}")
+    String accessTokenUri;
     @Value("${security.oauth2.client.client-id}")
     String clientId;
     @Value("${security.oauth2.client.client-secret}")
     String secret;
     @Autowired
     private RestTemplate restTemplate;
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private OAuth2ClientProperties oAuth2ClientProperties;
-
-    @Autowired(required=false)
-    private OAuth2ProtectedResourceDetails oAuth2ProtectedResourceDetails;
-
-    private AuthServiceClient client;
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
+
 // 注册用户
     public User insertUser(String username, String  password){
         User user=new User();
@@ -78,56 +83,47 @@ public class UserServiceDetail {
         return userRepository.save(user);
     }
 
-
-    public UserLoginDTO login(String username, String password) {
-        // 查询数据库
-        UserLoginDTO loginDto= new UserLoginDTO();
-        User user = userRepository.findByUsername(username);
-        loginDto.setUser(user);
-        log.info("user--"+loginDto.getUser().getUsername()+"---"+loginDto.getUser().getPassword());
-        if (user == null) {
-            throw new UserLoginException("error username");
+//登录获取access_token
+    public ResponseEntity<OAuth2AccessToken> login(@Valid User loginDto,BindingResult bindingResult,HttpServletResponse response) throws  Exception{
+        if (bindingResult.hasErrors()) {
+            throw new Exception("登录信息错误，请确认后再试");
+        }
+        log.info(loginDto.getUsername()+"---"+loginDto.getPassword());
+        User user = userRepository.findByUsername(loginDto.getUsername());
+        if (null == user) {
+            throw new Exception("用户为空，出错了");
         }
 
-        if(!BPwdEncoderUtil.matches(password,user.getPassword())){
-            throw new UserLoginException("error password");
+        if (!BPwdEncoderUtil.matches(loginDto.getPassword(), user.getPassword().replace("{bcrypt}",""))) {
+            throw new Exception("密码不正确");
         }
-        // 从auth-service获取JWT
-        String client_secret = clientId+":"+secret;
-//
+
+        String client_secret =oAuth2ClientProperties.getClientId()+":"+oAuth2ClientProperties.getClientSecret();
+
         client_secret = "Basic "+Base64.getEncoder().encodeToString(client_secret.getBytes());
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.set("Authorization",client_secret);
-//        log.info("client_secret"+client_secret+"--"+oAuth2ClientProperties.getClientId()+"--"+oAuth2ClientProperties.getClientSecret());
-//
-//        //授权请求信息
-//        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-//        map.put("username", Collections.singletonList(loginDto.getUser().getUsername()));
-//        map.put("password", Collections.singletonList(loginDto.getUser().getPassword()));
-//        map.put("grant_type", Collections.singletonList("password"));
-//
-//        map.put("scope", Collections.singletonList("server"));
-//        log.info("11233:"+map);
-//        //HttpEntity
-//        HttpEntity httpEntity = new HttpEntity(map,httpHeaders);
-//        //获取 Token
-//        ResponseEntity<OAuth2AccessToken> responseEntity=restTemplate.exchange(oAuth2ProtectedResourceDetails.getAccessTokenUri(), HttpMethod.POST,httpEntity, OAuth2AccessToken.class);
-//        log.info("responseEntity;"+responseEntity);
-          log.info("client_secret"+client_secret);
-          JWT jwt = client.getToken(//client_secret,
-                  "password",
-                               username,
-                               password,
-                     "user-service",
-                  "123456");
-     //   JWT jwt = client.getToken("Basic dXNlci1zZXJ2aWNlOjEyMzQ1Ng==","password", username, password);
-        log.info("jwt"+jwt);
-        if(jwt == null){
-            throw new UserLoginException("error internal");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set("Authorization",client_secret);
+
+        //授权请求信息
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.put("username", Collections.singletonList(loginDto.getUsername()));
+        map.put("password", Collections.singletonList(loginDto.getPassword()));
+        map.put("grant_type", Collections.singletonList(oAuth2ProtectedResourceDetails.getGrantType()));
+        map.put("scope", oAuth2ProtectedResourceDetails.getScope());
+        //HttpEntity
+        HttpEntity httpEntity = new HttpEntity(map,httpHeaders);
+        //获取 Token
+
+        log.info("client_secret:"+client_secret+"loginDto.getUsername:"+loginDto.getUsername()+"--loginDto.getUsername:"+loginDto.getPassword()+"123:"+oAuth2ProtectedResourceDetails.getAccessTokenUri()+"httpEntity:"+httpEntity+"OAuth2AccessToken.class:"+OAuth2AccessToken.class);
+        ResponseEntity<OAuth2AccessToken> re =restTemplate.exchange(oAuth2ProtectedResourceDetails.getAccessTokenUri(), HttpMethod.POST,httpEntity,OAuth2AccessToken.class);
+        if (re.getStatusCode() != HttpStatus.OK) {
+            log.debug("failed to authenticate user with OAuth2 token endpoint, status: {}",
+                    re.getStatusCodeValue());
+            throw new HttpClientErrorException(re.getStatusCode());
         }
-        UserLoginDTO userLoginDTO=new UserLoginDTO();
-        userLoginDTO.setJwt(jwt);
-        userLoginDTO.setUser(user);
-        return userLoginDTO;
+        OAuth2AccessToken oAuth2AccessToken = re.getBody();
+        log.info("re----"+re);
+        log.info("re12----"+restTemplate.exchange(accessTokenUri, HttpMethod.POST,httpEntity,OAuth2AccessToken.class));
+        return restTemplate.exchange(accessTokenUri, HttpMethod.POST,httpEntity,OAuth2AccessToken.class);
     }
 }

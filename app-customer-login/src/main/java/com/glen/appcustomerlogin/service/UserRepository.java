@@ -1,8 +1,4 @@
-package com.glen.appcustomerlogin.service;/**
- * @author Glen
- * @create 2019- 06-2019/6/28-10:32
- * @Description
- */
+package com.glen.appcustomerlogin.service;
 
 import com.glen.appcustomerlogin.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
