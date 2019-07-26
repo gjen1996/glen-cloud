@@ -48,6 +48,7 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private OAuth2ClientProperties oAuth2ClientProperties;
+    @Autowired
     private RestTemplate restTemplate;
     @Autowired
     OAuth2ProtectedResourceDetails oAuth2ProtectedResourceDetails;

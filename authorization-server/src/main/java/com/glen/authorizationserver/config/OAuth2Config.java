@@ -76,12 +76,15 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 
     @Bean
     public JwtAccessTokenConverter jwtTokenEnhancer() {
+        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("test-jwt.jks"), "test123".toCharArray());
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        converter.setKeyPair(keyStoreKeyFactory.getKeyPair("test-jwt"));
         //converter.setSigningKey("micosrv_signing_key");
-        log.info("jwtAccessTokenConverter privateKey ：" + privateKey);
-        converter.setSigningKey(privateKey);
-        converter.setVerifierKey(publicKey);
-       // converter.setSigningKey("test-secret");
+//        log.info("jwtAccessTokenConverter privateKey ：" + privateKey);
+//        converter.setSigningKey(privateKey);
+//        converter.setVerifierKey(publicKey);
+//       // converter.setSigningKey("123");
+        log.info("private key:"+converter);
         return converter;
     }
 
@@ -105,7 +108,7 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 //                // 配置token的过期时间为1h
 //                .accessTokenValiditySeconds(3600 * 1000);
 
-       clients.withClientDetails(clientDetailsService);
+      clients.withClientDetails(clientDetailsService);
 
     }
 
