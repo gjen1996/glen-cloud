@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "auth-server", fallback = AuthServiceClientFallback.class)
 public interface AuthServiceClient {
     @PostMapping("/oauth/token")
-    JWT getToken(@RequestHeader("Authorization") String authorization,
-                 @RequestParam("grant_type") String type,
+    JWT getToken(//@RequestHeader("Authorization") String Authorization,
+                 @RequestParam("grant_type") String grant_type,
                  @RequestParam("username") String username,
-                 @RequestParam("password") String password);
+                 @RequestParam("password") String password,
+                 @RequestParam("client_id") String client_id,
+                 @RequestParam("client_secret") String client_secret);
 
 }

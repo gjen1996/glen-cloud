@@ -40,13 +40,14 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
-//@RequestMapping("/user")
+@RequestMapping("/user")
 @RestController
 @Slf4j
 public class UserController {
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private OAuth2ClientProperties oAuth2ClientProperties;
     private RestTemplate restTemplate;
     @Autowired
     OAuth2ProtectedResourceDetails oAuth2ProtectedResourceDetails;
@@ -85,7 +86,7 @@ public class UserController {
             throw new Exception("密码不正确");
         }
 
-        String client_secret = clientId+":"+secret;
+        String client_secret =oAuth2ClientProperties.getClientId()+":"+oAuth2ClientProperties.getClientSecret();
 
         client_secret = "Basic "+Base64.getEncoder().encodeToString(client_secret.getBytes());
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -95,14 +96,14 @@ public class UserController {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.put("username", Collections.singletonList(loginDto.getUsername()));
         map.put("password", Collections.singletonList(loginDto.getPassword()));
-        map.put("grant_type", Collections.singletonList(grantType));
-        map.put("scope", Collections.singletonList(scope));
+        map.put("grant_type", Collections.singletonList(oAuth2ProtectedResourceDetails.getGrantType()));
+        map.put("scope", oAuth2ProtectedResourceDetails.getScope());
         //HttpEntity
         HttpEntity httpEntity = new HttpEntity(map,httpHeaders);
         //获取 Token
 
-         log.info("loginDto.getUsername:"+loginDto.getUsername()+"--loginDto.getUsername:"+loginDto.getPassword()+"123:"+oAuth2ProtectedResourceDetails.getAccessTokenUri()+"httpEntity:"+httpEntity+"OAuth2AccessToken.class:"+OAuth2AccessToken.class);
-        ResponseEntity<OAuth2AccessToken> re =restTemplate.postForEntity(oAuth2ProtectedResourceDetails.getAccessTokenUri(),httpEntity,OAuth2AccessToken.class);
+         log.info("client_secret:"+client_secret+"loginDto.getUsername:"+loginDto.getUsername()+"--loginDto.getUsername:"+loginDto.getPassword()+"123:"+oAuth2ProtectedResourceDetails.getAccessTokenUri()+"httpEntity:"+httpEntity+"OAuth2AccessToken.class:"+OAuth2AccessToken.class);
+        ResponseEntity<OAuth2AccessToken> re =restTemplate.exchange(oAuth2ProtectedResourceDetails.getAccessTokenUri(), HttpMethod.POST,httpEntity,OAuth2AccessToken.class);
         if (re.getStatusCode() != HttpStatus.OK) {
             log.debug("failed to authenticate user with OAuth2 token endpoint, status: {}",
                     re.getStatusCodeValue());

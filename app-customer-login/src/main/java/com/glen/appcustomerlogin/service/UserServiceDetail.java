@@ -114,7 +114,12 @@ public class UserServiceDetail {
 //        ResponseEntity<OAuth2AccessToken> responseEntity=restTemplate.exchange(oAuth2ProtectedResourceDetails.getAccessTokenUri(), HttpMethod.POST,httpEntity, OAuth2AccessToken.class);
 //        log.info("responseEntity;"+responseEntity);
           log.info("client_secret"+client_secret);
-          JWT jwt = client.getToken(client_secret,"password", username, password);
+          JWT jwt = client.getToken(//client_secret,
+                  "password",
+                               username,
+                               password,
+                     "user-service",
+                  "123456");
      //   JWT jwt = client.getToken("Basic dXNlci1zZXJ2aWNlOjEyMzQ1Ng==","password", username, password);
         log.info("jwt"+jwt);
         if(jwt == null){

@@ -8,6 +8,7 @@ import com.glen.appcustomerlogin.entity.JWT;
 import com.glen.appcustomerlogin.service.AuthServiceClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author Glen
@@ -18,7 +19,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthServiceClientFallback implements AuthServiceClient {
     @Override
-    public JWT getToken(String authorization, String type, String username, String password) {
+    public JWT getToken(//String Authorization,
+                        String grant_type,
+                        String username,
+                        String password,
+                        String client_id,
+                        String client_secret) {
        log.info("Fallback of getToken is executed");
         return null;
     }

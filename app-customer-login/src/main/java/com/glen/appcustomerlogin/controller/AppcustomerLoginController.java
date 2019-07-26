@@ -31,7 +31,7 @@ import java.util.UUID;
 @RestController
 @EnableResourceServer
 @Slf4j
-@RequestMapping("/user")
+@RequestMapping("/user1")
 public class AppcustomerLoginController {
     @Autowired
     UserServiceDetail userServiceDetail;
