@@ -19,12 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Component
 public class AuthServiceClientFallback implements AuthServiceClient {
     @Override
-    public JWT getToken(//String Authorization,
+    public JWT getToken(String Authorization,
                         String grant_type,
                         String username,
-                        String password,
-                        String client_id,
-                        String client_secret) {
+                        String password) {
        log.info("Fallback of getToken is executed");
         return null;
     }

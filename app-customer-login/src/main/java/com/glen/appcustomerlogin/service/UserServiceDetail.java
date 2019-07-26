@@ -70,6 +70,8 @@ public class UserServiceDetail {
     String secret;
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private AuthServiceClient client;
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
@@ -115,6 +117,9 @@ public class UserServiceDetail {
         //获取 Token
 
         log.info("client_secret:"+client_secret+"loginDto.getUsername:"+loginDto.getUsername()+"--loginDto.getUsername:"+loginDto.getPassword()+"123:"+oAuth2ProtectedResourceDetails.getAccessTokenUri()+"httpEntity:"+httpEntity+"OAuth2AccessToken.class:"+OAuth2AccessToken.class);
+        // 从auth-service获取JWT
+        JWT jwt = client.getToken(client_secret, "password", loginDto.getUsername(), loginDto.getPassword());
+        log.info("jwt----"+jwt);
         ResponseEntity<OAuth2AccessToken> re =restTemplate.exchange(oAuth2ProtectedResourceDetails.getAccessTokenUri(), HttpMethod.POST,httpEntity,OAuth2AccessToken.class);
         if (re.getStatusCode() != HttpStatus.OK) {
             log.debug("failed to authenticate user with OAuth2 token endpoint, status: {}",

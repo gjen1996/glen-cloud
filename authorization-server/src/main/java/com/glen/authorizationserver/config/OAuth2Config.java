@@ -114,17 +114,32 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.tokenStore(tokenStore).authenticationManager(authenticationManager)
-                .userDetailsService(userServiceDetail);
-
-        // 配置tokenServices参数
-        DefaultTokenServices tokenServices = new DefaultTokenServices();
-        tokenServices.setTokenStore(endpoints.getTokenStore());
-        tokenServices.setSupportRefreshToken(false);
-        tokenServices.setClientDetailsService(endpoints.getClientDetailsService());
-        tokenServices.setTokenEnhancer(endpoints.getTokenEnhancer());
-        tokenServices.setAccessTokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(30)); // 30天
-        endpoints.tokenServices(tokenServices);
+        // 配置token的存储方式为JwtTokenStore
+        endpoints.tokenStore(tokenStore())
+                // 配置用于JWT私钥加密的增强器
+                .tokenEnhancer(jwtTokenEnhancer())
+                // 配置安全认证管理
+                .authenticationManager(authenticationManager);
+//        endpoints
+//                //指定认证管理器
+//                .authenticationManager(authenticationManager)
+//                //用户账号密码认证
+//                .userDetailsService(userServiceDetail)
+//                // refresh_token
+//                .reuseRefreshTokens(false)
+//                //指定token存储位置
+//                .tokenStore(tokenStore())
+//                // 配置JwtAccessToken转换器
+//                .accessTokenConverter(accessTokenConverter());
+//
+//        // 配置tokenServices参数
+//        DefaultTokenServices tokenServices = new DefaultTokenServices();
+//        tokenServices.setTokenStore(endpoints.getTokenStore());
+//        tokenServices.setSupportRefreshToken(false);
+//        tokenServices.setClientDetailsService(endpoints.getClientDetailsService());
+//        tokenServices.setTokenEnhancer(endpoints.getTokenEnhancer());
+//        tokenServices.setAccessTokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(30)); // 30天
+//        endpoints.tokenServices(tokenServices);
     }
 
     @Override

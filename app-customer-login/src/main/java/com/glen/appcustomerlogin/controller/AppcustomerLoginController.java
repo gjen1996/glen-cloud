@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -35,10 +36,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @RequestMapping("/user")
 @RestController
@@ -55,5 +53,10 @@ public class AppcustomerLoginController {
     public User postUser(@RequestParam("username") String username,
                          @RequestParam("password") String password) {
         return userServiceDetail.insertUser(username, password);
+    }
+    @RequestMapping("/foo")
+   // @PreAuthorize("hasAuthority('ADMIN')")
+    public String getFoo() {
+        return "i'm foo, " + UUID.randomUUID().toString();
     }
 }
