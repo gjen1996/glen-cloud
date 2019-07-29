@@ -96,19 +96,21 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-//       String finalSecret =new BCryptPasswordEncoder().encode("123456");
-//        clients.inMemory()
-//                // 配置一个客户端
-//                .withClient("user-service")
-//                .secret("123456")
-//                // 配置客户端的域
-//                .scopes("service")
-//                // 配置验证类型为refresh_token和password
-//                .authorizedGrantTypes("refresh_token","password")
-//                // 配置token的过期时间为1h
-//                .accessTokenValiditySeconds(3600 * 1000);
+       String finalSecret =new BCryptPasswordEncoder().encode("123456");
+        clients.inMemory()
+                // 配置一个客户端
+                .withClient("user-service")
+                .secret("123456")
+                // 配置客户端的域
+                .scopes("service")
+                // 配置验证类型为refresh_token和password
+                .authorizedGrantTypes("refresh_token","password")
+                // 配置token的过期时间为1h
+                .accessTokenValiditySeconds(3600 * 1000)
+                .resourceIds("user-service")
+                .authorities("ROLE_ADMIN");
 
-      clients.withClientDetails(clientDetailsService);
+    //  clients.withClientDetails(clientDetailsService);
 
     }
 

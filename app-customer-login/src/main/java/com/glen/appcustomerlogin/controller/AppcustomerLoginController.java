@@ -55,7 +55,7 @@ public class AppcustomerLoginController {
         return userServiceDetail.insertUser(username, password);
     }
     @RequestMapping("/foo")
-   // @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String getFoo() {
         return "i'm foo, " + UUID.randomUUID().toString();
     }

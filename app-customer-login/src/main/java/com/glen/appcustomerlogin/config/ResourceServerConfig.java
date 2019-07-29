@@ -34,12 +34,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/oauth/**","/oauth/token","/user/register", "/user/login","/user/register", "/user1/login").permitAll()
+                .antMatchers("/oauth/**","/oauth/token", "/user/login","/user/register").permitAll()
                 .antMatchers("/**").authenticated();
     }
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        resources.tokenStore(tokenStore);
+        resources.tokenStore(tokenStore).resourceId("user-service");
     }
+
 }
