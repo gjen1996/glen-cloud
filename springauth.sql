@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 25/07/2019 16:56:43
+ Date: 01/08/2019 09:31:42
 */
 
 SET NAMES utf8mb4;
@@ -86,9 +86,9 @@ CREATE TABLE `oauth_client_details`  (
 -- ----------------------------
 -- Records of oauth_client_details
 -- ----------------------------
-INSERT INTO `oauth_client_details` VALUES ('client_1', NULL, '$2a$10$EkyBaGtfGUJJvmnYE99HwO4nv2Gi.WqwF0QLxQjLcaHb6iSA8a8yG', 'select', 'refresh_token,client_credentials', NULL, 'oauth2', NULL, NULL, NULL, NULL);
-INSERT INTO `oauth_client_details` VALUES ('client_2', NULL, '$2a$10$EkyBaGtfGUJJvmnYE99HwO4nv2Gi.WqwF0QLxQjLcaHb6iSA8a8yG', 'server', 'refresh_token,password', NULL, 'oauth2', NULL, NULL, NULL, NULL);
-INSERT INTO `oauth_client_details` VALUES ('user-service', 'test_resource_id', '$2a$10$lnCIIDtc.h6qmnEkfv3FrObRGi9aKKVMU259RhfW0HNXcsPcuXsbS', 'service', 'refresh_token,password', 'http://localhost:8765/store/home', 'ROLE_ADMIN,ROLE_DEVICE,ROLE_VIDEO', 3600, 7200, '', 'true');
+INSERT INTO `oauth_client_details` VALUES ('client_1', NULL, '$2a$10$pejbmDk1wAg28dVKCzEA7eMDMXaOQzo0jOMqoZwSkY2NWapwkQZJq', 'select', 'refresh_token,client_credentials,password', NULL, 'oauth2', NULL, NULL, NULL, NULL);
+INSERT INTO `oauth_client_details` VALUES ('client_2', NULL, '$2a$10$pejbmDk1wAg28dVKCzEA7eMDMXaOQzo0jOMqoZwSkY2NWapwkQZJq', 'server', 'refresh_token,password', NULL, 'oauth2', NULL, NULL, NULL, NULL);
+INSERT INTO `oauth_client_details` VALUES ('user-service', 'user-service', '$2a$10$pejbmDk1wAg28dVKCzEA7eMDMXaOQzo0jOMqoZwSkY2NWapwkQZJq', 'service', 'refresh_token,password', 'http://localhost:8765/store/home', 'ROLE_ADMIN,ROLE_DEVICE,ROLE_VIDEO', 3600, 7200, NULL, 'true');
 
 -- ----------------------------
 -- Table structure for oauth_client_token
@@ -135,7 +135,7 @@ CREATE TABLE `role`  (
 -- ----------------------------
 -- Records of role
 -- ----------------------------
-INSERT INTO `role` VALUES (1, 'ADMIN');
+INSERT INTO `role` VALUES (1, 'ROLE_ADMIN');
 
 -- ----------------------------
 -- Table structure for user
@@ -147,13 +147,14 @@ CREATE TABLE `user`  (
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `UK_sb8bbouer5wak8vyiiy4pf2bx`(`username`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (12, '$2a$10$zaLf6sSbWTaNoBsHEQFUm.Ad3cZxutkYo16yqA7IC7rNIPzbQ8cFe', 'glen');
+INSERT INTO `user` VALUES (1, '$2a$10$zaLf6sSbWTaNoBsHEQFUm.Ad3cZxutkYo16yqA7IC7rNIPzbQ8cFe', 'glen');
 INSERT INTO `user` VALUES (13, '$2a$10$3.GxfWHLkolVgMtTT/Pz0ed8qlTxLQo97KDIWVR/t7V4B2F2AbKma', 'test');
+INSERT INTO `user` VALUES (14, '$2a$10$pejbmDk1wAg28dVKCzEA7eMDMXaOQzo0jOMqoZwSkY2NWapwkQZJq', 'user-service');
 
 -- ----------------------------
 -- Table structure for user_role
@@ -171,6 +172,6 @@ CREATE TABLE `user_role`  (
 -- ----------------------------
 -- Records of user_role
 -- ----------------------------
-INSERT INTO `user_role` VALUES (12, 1);
+INSERT INTO `user_role` VALUES (1, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
