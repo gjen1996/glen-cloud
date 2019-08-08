@@ -57,6 +57,6 @@ public class AppcustomerLoginController {
     @RequestMapping("/foo")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String getFoo() {
-        return "i'm foo, " + UUID.randomUUID().toString();
+        return "程序猿小哥哥调用成功";
     }
 }
