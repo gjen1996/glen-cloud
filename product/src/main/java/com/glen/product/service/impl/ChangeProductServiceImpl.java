@@ -6,15 +6,19 @@ import com.glen.product.entity.ChangeProductEntity;
 import com.glen.product.dao.ChangeProductDao;
 import com.glen.product.service.ChangeProductService;
 import com.glen.product.service.StoreTerminnalDetailService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+
 @Service
+@Slf4j
 public class ChangeProductServiceImpl extends ServiceImpl<ChangeProductDao, ChangeProductEntity>
 		implements ChangeProductService {
 
+	@Autowired
 	private StoreTerminnalDetailService storeTerminnalDetailService;
 	//预付到预付
 	@Override
@@ -23,8 +27,10 @@ public class ChangeProductServiceImpl extends ServiceImpl<ChangeProductDao, Chan
 		for(int i =0;i<iccids.length;i++){
 			String iccid= iccids[i];
 		//2.获取卡
+        log.info("iccic"+iccid);
 		Map<String,Object> storeTerminnalDetailInfo = storeTerminnalDetailService.getStoreTerminalByIccid(iccid);
-		boolean flag = this.updateChangeProduct(storeTerminnalDetailInfo,storeTerminnalDetailInfo.get("productid").toString(),newProductId);
+		log.info("storeTerminnalDetailInfo:"+storeTerminnalDetailInfo);
+		boolean flag = this.updateChangeProduct(storeTerminnalDetailInfo,storeTerminnalDetailInfo.get("productId").toString(),newProductId);
 		if(flag==false){
 			errorList.add(iccid);
 		}

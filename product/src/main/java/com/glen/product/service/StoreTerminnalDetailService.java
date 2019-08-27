@@ -20,8 +20,6 @@ import java.util.Map;
  */
 @FeignClient(value="terminnal", fallback = StoreTerminnalDetailServiceImplFallback.class)
 public interface StoreTerminnalDetailService {
-
     @RequestMapping("/terminnal/changeProduct/getStoreTerminalByIccid/{iccid}")
-    @ResponseBody
     public Map<String,Object> getStoreTerminalByIccid(@PathVariable String iccid);
 }
