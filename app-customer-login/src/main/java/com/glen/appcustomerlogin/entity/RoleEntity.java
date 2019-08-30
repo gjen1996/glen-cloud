@@ -4,22 +4,30 @@ package com.glen.appcustomerlogin.entity;/**
  * @Description
  */
 
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.*;
 
 /**
  * @author Glen
  * @create 2019/6/28 10:35 
  * @Description
  */
-@Entity
-public class Role implements GrantedAuthority {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@TableName("role")
+public class RoleEntity implements GrantedAuthority {
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    @TableField("name")
     private String name;
 
     public Long getId() {

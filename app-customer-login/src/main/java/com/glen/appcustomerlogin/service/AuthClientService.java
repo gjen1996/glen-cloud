@@ -4,11 +4,9 @@ package com.glen.appcustomerlogin.service;/**
  * @Description
  */
 
-import com.glen.appcustomerlogin.entity.JWT;
+import com.glen.appcustomerlogin.entity.JWTEntity;
 import com.glen.appcustomerlogin.service.impl.AuthServiceClientFallback;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @Description
  */
 @FeignClient(value = "auth-server", fallback = AuthServiceClientFallback.class)
-public interface AuthServiceClient {
+public interface AuthClientService {
     @PostMapping("/oauth/token")
-    JWT getToken(@RequestHeader("Authorization") String Authorization,
-                 @RequestParam("grant_type") String grant_type,
-                 @RequestParam("username") String username,
-                 @RequestParam("password") String password);
+    JWTEntity getToken(@RequestHeader("Authorization") String Authorization,
+                       @RequestParam("grant_type") String grant_type,
+                       @RequestParam("username") String username,
+                       @RequestParam("password") String password);
 
 
 }

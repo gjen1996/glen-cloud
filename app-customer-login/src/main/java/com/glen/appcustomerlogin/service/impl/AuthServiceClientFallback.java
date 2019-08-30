@@ -4,12 +4,10 @@ package com.glen.appcustomerlogin.service.impl;/**
  * @Description
  */
 
-import com.glen.appcustomerlogin.entity.JWT;
-import com.glen.appcustomerlogin.service.AuthServiceClient;
+import com.glen.appcustomerlogin.entity.JWTEntity;
+import com.glen.appcustomerlogin.service.AuthClientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author Glen
@@ -18,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Slf4j
 @Component
-public class AuthServiceClientFallback implements AuthServiceClient {
+public class AuthServiceClientFallback implements AuthClientService {
     @Override
-    public JWT getToken(String Authorization,
-                        String grant_type,
-                        String username,
-                        String password) {
+    public JWTEntity getToken(String Authorization,
+                              String grant_type,
+                              String username,
+                              String password) {
        log.info("Fallback of getToken is executed");
         return null;
     }

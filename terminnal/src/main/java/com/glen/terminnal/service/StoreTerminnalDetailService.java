@@ -22,5 +22,5 @@ public interface StoreTerminnalDetailService extends IService<StoreTerminnalDeta
 	 * @param iccid
 	 * @return
 	 */
-	Map<String,Object> getStoreTerminalByIccid(String iccid);
+	StoreTerminnalDetailEntity getStoreTerminalByIccid(String iccid);
 }

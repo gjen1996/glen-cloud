@@ -12,7 +12,7 @@ import lombok.Data;
  * @Description
  */
 @Data
-public class UserLoginDTO {
-    private JWT jwt;
-    private User user;
+public class UserLoginDTOEntity {
+    private JWTEntity jwt;
+    private UserEntity user;
 }

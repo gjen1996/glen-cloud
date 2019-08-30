@@ -9,8 +9,18 @@ import java.util.Map;
 
 public interface ChangeProductService extends IService<ChangeProductEntity>{
 
-	List<String> changePrePayToPrePay(String newProductId, String[] iccids);
+	List<String> changePrePayToPrePay(String newProductId,String[] iccids);
 
+	List<String> changeNextMonthPrePayToNextMonthPrePay(String newProductId,String[] iccids);
+
+	List<String> changeMonthPayShareToMonthPayShare(String newProductId,String[] iccids);
+
+	List<String> changeMonthPayToMonthPay(String newProductId,String[] iccids);
+	/**
+	 * 页面展示
+	 * @author hesw
+	 */
+	PageUtils queryPage(Map<String, Object> params) throws Exception;
 
 
 }

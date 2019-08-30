@@ -13,7 +13,7 @@ package com.glen.appcustomerlogin.entity;/**
 import lombok.Data;
 
 @Data
-public class JWT {
+public class JWTEntity {
     private String access_token;
     private String token_type;
     private String refresh_token;

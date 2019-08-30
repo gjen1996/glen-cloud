@@ -25,12 +25,10 @@ import java.util.Map;
 public class StoreTerminnalDetailServiceImpl extends ServiceImpl<StoreTerminnalDetailDao, StoreTerminnalDetailEntity> implements StoreTerminnalDetailService {
 
 	@Override
-	public Map<String,Object> getStoreTerminalByIccid(String iccid) {
+	public StoreTerminnalDetailEntity getStoreTerminalByIccid(String iccid) {
 		EntityWrapper<StoreTerminnalDetailEntity> ew = new EntityWrapper<>();
 		ew.eq("iccid",iccid);
-		Map<String,Object> map = new HashMap<>();
-		map.put("StoreTerminnalDetailEntity",this.selectOne(ew));
-		return map;
+		return this.selectOne(ew);
 	}
 	
 }
