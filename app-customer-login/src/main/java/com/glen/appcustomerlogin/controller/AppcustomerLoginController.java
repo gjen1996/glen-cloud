@@ -14,9 +14,9 @@ import com.glen.appcustomerlogin.config.BPwdEncoderUtil;
 import com.glen.appcustomerlogin.dao.UserDao;
 import com.glen.appcustomerlogin.entity.JWTEntity;
 import com.glen.appcustomerlogin.entity.UserEntity;
+import com.glen.appcustomerlogin.entity.UserLoginDTOEntity;
 import com.glen.appcustomerlogin.service.UserLoginService;
 import com.glen.appcustomerlogin.util.CookieUtils;
-import com.glen.appcustomerlogin.util.JwtDecrypt;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import com.auth0.jwt.JWT;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequestMapping("/user")
 @RestController
@@ -36,9 +38,20 @@ public class AppcustomerLoginController {
     UserLoginService userLoginService;
     @Autowired
     private UserDao userDao;
-
+    @Autowired
+    HttpServletRequest request;
     @RequestMapping("/login")
-    public JWTEntity login(@Valid UserEntity loginDto, BindingResult bindingResult, HttpServletResponse response) throws Exception {
+    public UserLoginDTOEntity login(@Valid UserEntity loginDto, BindingResult bindingResult, HttpServletResponse response) throws Exception {
+        userLoginService.login(loginDto,bindingResult,response);
+        Map<String, String> map = new HashMap<String, String>();
+        Enumeration headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String key = (String) headerNames.nextElement();
+            String value = request.getHeader(key);
+            map.put(key, value);
+        }
+
+       log.info("这是："+"--"+userLoginService.login(loginDto,bindingResult,response));
         return userLoginService.login(loginDto,bindingResult,response);
     }
     @PostMapping("/register")
@@ -55,32 +68,13 @@ public class AppcustomerLoginController {
     public String getFoo() {
         return "程序猿小哥哥调用成功";
     }
-    // 更新token
-    @RequestMapping("/getToken")
-    public JWTEntity getToken(HttpServletRequest request) throws Exception {
-        String token =
-        //String token = CookieUtils.getCookie(request, "token");
-        log.info("token:"+token);
-        if (token == null) {
-            // cookie没有获取到token就直接返回错误
-            return null;
-        }
-        // 解密token
-        JwtDecrypt jwtDecrypt =new JwtDecrypt();
-        DecodedJWT jwt = jwtDecrypt.deToken(token);
-        log.info("jwt.getClaim(\"username\").asString():"+jwt.getClaim("username").asString());
-        if (StringUtils.isBlank(jwt.getToken())) {
-            //如果解密出来的token是空就直接返回错误
-            return null;
-        }
-        // 生成新的token
-        UserEntity loginDto =new UserEntity();
-        loginDto.setUsername(jwt.getClaim("username").asString());
-        loginDto.setPassword(jwt.getClaim("password").asString());
-        // JWTEntity jwtReturn = userLoginService.login(loginDto,bindingResult,response);
-        JWTEntity jwtReturn = null;
 
-        // 返回成功
-        return jwtReturn;
+    @RequestMapping("/getToken")
+    public String getToken(){
+        String token = CookieUtils.getCookie(request, "token");
+        String userinfo = CookieUtils.getCookie(request, "userinfo");
+        log.info("userinfo:"+userinfo+"--token:"+token);
+        return null;
+
     }
 }

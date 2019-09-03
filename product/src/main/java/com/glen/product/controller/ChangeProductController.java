@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,10 +73,10 @@ public class ChangeProductController {
 		return result;
 	}
 	//页面展示
-	@RequestMapping("/EditProductQueryPage")
-	@ResponseBody
-	public R queryPendingOrder(@RequestParam Map<String, Object> params) throws Exception {
-		PageUtils page = changeProductService.queryPage(params);
-		return R.ok().put("page", page);
-	}
+//	@RequestMapping("/EditProductQueryPage")
+//	@ResponseBody
+//	public R queryPendingOrder(@RequestParam Map<String, Object> params) throws Exception {
+//		PageUtils page = changeProductService.queryPage(params);
+//		return R.ok().put("page", page);
+//	}
 }

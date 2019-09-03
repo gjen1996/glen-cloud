@@ -20,7 +20,7 @@ public interface ChangeProductService extends IService<ChangeProductEntity>{
 	 * 页面展示
 	 * @author hesw
 	 */
-	PageUtils queryPage(Map<String, Object> params) throws Exception;
+//	PageUtils queryPage(Map<String, Object> params) throws Exception;
 
 
 }

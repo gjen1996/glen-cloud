@@ -354,53 +354,53 @@ public class ChangeProductServiceImpl extends ServiceImpl<ChangeProductDao, Chan
 		this.insertOrUpdate(changeProductEntity);
 		return true;
 	}
-	@Override
-	public PageUtils queryPage(Map<String, Object> params) throws Exception {
-		Map<String, Object> map=sysUserService.getUserForDataShow(request);
-		String showDataType=(String) map.get("showDataType");
-		String key=(String) params.get("key");
-		String username = (String) request.getSession().getAttribute("username");
-		Page<ChangeProductEntity> page = null;
-		EntityWrapper<ChangeProductEntity> ew =new EntityWrapper<>();
-		if(showDataType.equals("total")){
-			if(StringUtils.isNotBlank(key)){
-				ew.like("user_id", key).or().like("username",key).or().like("iccid", key).or().like("account_id", key);
-			}
-		}
-
-		if(showDataType.equals("personal")){
-			Long userId = sysUserDao.selectUserDeptId(username).getUserId();
-			ew.eq("user_id", userId);
-			if(StringUtils.isNotBlank(key)){
-				ew.andNew().like("user_id", key).or().like("username",key).or().like("iccid", key).or().like("account_id", key);;
-			}
-		}
-
-		if(showDataType.equals("someUser")){
-			List<SysUserEntity> userList=(List<SysUserEntity>) map.get("userList");
-			if (userList.size() > 0) {
-				if (key == null || key.equals("")) {
-					for (int i = 0; i < userList.size(); i++) {
-						ew.or().eq("user_id", userList.get(i).getUserId());
-					}
-				}else{
-					ew.and().like("user_id", key).or().like("username",key).or().like("iccid", key).or().like("account_id", key);;
-					for (int i = 0; i < userList.size(); i++) {
-						if(i==0){
-							ew.andNew().eq("user_id", userList.get(0).getUserId());
-						}else{
-							ew.or().eq("user_id", userList.get(i).getUserId());
-						}
-					}
-
-				}
-			}else{
-				ew.and().eq("1", "2");
-			}
-
-		}
-
-		page = this.selectPage(new Query<ChangeProductEntity>(params).getPage(), ew);
-		return new PageUtils(page);
-	}
+//	@Override
+//	public PageUtils queryPage(Map<String, Object> params) throws Exception {
+//		Map<String, Object> map=sysUserService.getUserForDataShow(request);
+//		String showDataType=(String) map.get("showDataType");
+//		String key=(String) params.get("key");
+//		String username = (String) request.getSession().getAttribute("username");
+//		Page<ChangeProductEntity> page = null;
+//		EntityWrapper<ChangeProductEntity> ew =new EntityWrapper<>();
+//		if(showDataType.equals("total")){
+//			if(StringUtils.isNotBlank(key)){
+//				ew.like("user_id", key).or().like("username",key).or().like("iccid", key).or().like("account_id", key);
+//			}
+//		}
+//
+//		if(showDataType.equals("personal")){
+//			Long userId = sysUserDao.selectUserDeptId(username).getUserId();
+//			ew.eq("user_id", userId);
+//			if(StringUtils.isNotBlank(key)){
+//				ew.andNew().like("user_id", key).or().like("username",key).or().like("iccid", key).or().like("account_id", key);;
+//			}
+//		}
+//
+//		if(showDataType.equals("someUser")){
+//			List<SysUserEntity> userList=(List<SysUserEntity>) map.get("userList");
+//			if (userList.size() > 0) {
+//				if (key == null || key.equals("")) {
+//					for (int i = 0; i < userList.size(); i++) {
+//						ew.or().eq("user_id", userList.get(i).getUserId());
+//					}
+//				}else{
+//					ew.and().like("user_id", key).or().like("username",key).or().like("iccid", key).or().like("account_id", key);;
+//					for (int i = 0; i < userList.size(); i++) {
+//						if(i==0){
+//							ew.andNew().eq("user_id", userList.get(0).getUserId());
+//						}else{
+//							ew.or().eq("user_id", userList.get(i).getUserId());
+//						}
+//					}
+//
+//				}
+//			}else{
+//				ew.and().eq("1", "2");
+//			}
+//
+//		}
+//
+//		page = this.selectPage(new Query<ChangeProductEntity>(params).getPage(), ew);
+//		return new PageUtils(page);
+//	}
 }

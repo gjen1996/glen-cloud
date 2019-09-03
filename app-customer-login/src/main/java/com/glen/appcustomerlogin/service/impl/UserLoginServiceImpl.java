@@ -7,6 +7,7 @@ package com.glen.appcustomerlogin.service.impl;/**
 import com.glen.appcustomerlogin.config.BPwdEncoderUtil;
 import com.glen.appcustomerlogin.entity.JWTEntity;
 import com.glen.appcustomerlogin.entity.UserEntity;
+import com.glen.appcustomerlogin.entity.UserLoginDTOEntity;
 import com.glen.appcustomerlogin.service.AuthClientService;
 import com.glen.appcustomerlogin.service.UserLoginService;
 import com.glen.appcustomerlogin.dao.UserDao;
@@ -69,7 +70,7 @@ public class UserLoginServiceImpl implements UserLoginService {
 
 //登录获取access_token
     @Override
-    public JWTEntity login(@Valid UserEntity loginDto, BindingResult bindingResult, HttpServletResponse response) throws  Exception{
+    public UserLoginDTOEntity login(@Valid UserEntity loginDto, BindingResult bindingResult, HttpServletResponse response) throws  Exception{
         if (bindingResult.hasErrors()) {
             throw new Exception("登录信息错误，请确认后再试");
         }
@@ -100,17 +101,22 @@ public class UserLoginServiceImpl implements UserLoginService {
         HttpEntity httpEntity = new HttpEntity(map,httpHeaders);
         //获取 Token
 
-        log.info("client_secret:"+client_secret+"loginDto.getUsername:"+loginDto.getUsername()+"--loginDto.getUsername:"+loginDto.getPassword()+"123:"+oAuth2ProtectedResourceDetails.getAccessTokenUri()+"httpEntity:"+httpEntity+"OAuth2AccessToken.class:"+OAuth2AccessToken.class);
+       // log.info("client_secret:"+client_secret+"loginDto.getUsername:"+loginDto.getUsername()+"--loginDto.getUsername:"+loginDto.getPassword()+"123:"+oAuth2ProtectedResourceDetails.getAccessTokenUri()+"httpEntity:"+httpEntity+"OAuth2AccessToken.class:"+OAuth2AccessToken.class);
          //第一种方式获取jwt
         // 从auth-service获取JWT
         JWTEntity jwt = client.getToken(client_secret, "password", loginDto.getUsername(), loginDto.getPassword());
         if(jwt == null){
              jwt = client.getToken(client_secret, "password", loginDto.getUsername(), loginDto.getPassword());
         }
-        log.info("jwt.getAccess_token()"+jwt.getAccess_token());
+       // log.info("jwt.getAccess_token()"+jwt.getAccess_token());
+
         CookieUtils.writeCookie(response, "token", jwt.getAccess_token());
+        CookieUtils.writeCookie(response, "userinfo", loginDto.getUsername());
         log.info("jwt----"+jwt);
-        return jwt;
+        UserLoginDTOEntity userLoginDTOEntity =new UserLoginDTOEntity();
+        userLoginDTOEntity.setJwt(jwt);
+        userLoginDTOEntity.setUser(loginDto);
+        return userLoginDTOEntity;
 //        //第二种方式获取
 //        ResponseEntity<OAuth2AccessToken> re =restTemplate.exchange(oAuth2ProtectedResourceDetails.getAccessTokenUri(), HttpMethod.POST,httpEntity,OAuth2AccessToken.class);
 //        if (re.getStatusCode() != HttpStatus.OK) {
