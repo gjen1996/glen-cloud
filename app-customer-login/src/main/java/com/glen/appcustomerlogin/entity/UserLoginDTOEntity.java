@@ -14,5 +14,5 @@ import lombok.Data;
 @Data
 public class UserLoginDTOEntity {
     private JWTEntity jwt;
-    private UserEntity user;
+    private SysUserEntity user;
 }

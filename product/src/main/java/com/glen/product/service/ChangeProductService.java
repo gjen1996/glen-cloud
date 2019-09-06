@@ -1,5 +1,6 @@
 package com.glen.product.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.service.IService;
 import com.glen.product.entity.ChangeProductEntity;
 import com.glen.product.utils.PageUtils;
@@ -20,7 +21,7 @@ public interface ChangeProductService extends IService<ChangeProductEntity>{
 	 * 页面展示
 	 * @author hesw
 	 */
-//	PageUtils queryPage(Map<String, Object> params) throws Exception;
+	PageUtils queryPage(JSONObject data) throws Exception;
 
 
 }

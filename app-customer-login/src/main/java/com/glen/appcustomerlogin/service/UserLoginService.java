@@ -4,8 +4,7 @@ package com.glen.appcustomerlogin.service;/**
  * @Description
  */
 
-import com.glen.appcustomerlogin.entity.JWTEntity;
-import com.glen.appcustomerlogin.entity.UserEntity;
+import com.glen.appcustomerlogin.entity.SysUserEntity;
 import com.glen.appcustomerlogin.entity.UserLoginDTOEntity;
 import org.springframework.validation.BindingResult;
 
@@ -18,7 +17,7 @@ import javax.validation.Valid;
  * @Description
  */
 public interface UserLoginService {
-    public UserLoginDTOEntity login(@Valid UserEntity loginDto, BindingResult bindingResult, HttpServletResponse response) throws  Exception;
+    public UserLoginDTOEntity login(@Valid SysUserEntity loginDto, BindingResult bindingResult, HttpServletResponse response) throws  Exception;
    // public ResponseEntity<OAuth2AccessToken> login(@Valid User loginDto, BindingResult bindingResult, HttpServletResponse response) throws  Exception;
 
 }

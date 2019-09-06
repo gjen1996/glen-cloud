@@ -6,7 +6,7 @@ package com.glen.appcustomerlogin.service.impl;/**
 
 import com.glen.appcustomerlogin.config.BPwdEncoderUtil;
 import com.glen.appcustomerlogin.entity.JWTEntity;
-import com.glen.appcustomerlogin.entity.UserEntity;
+import com.glen.appcustomerlogin.entity.SysUserEntity;
 import com.glen.appcustomerlogin.entity.UserLoginDTOEntity;
 import com.glen.appcustomerlogin.service.AuthClientService;
 import com.glen.appcustomerlogin.service.UserLoginService;
@@ -17,9 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.*;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -44,6 +44,8 @@ public class UserLoginServiceImpl implements UserLoginService {
     private UserDao userDao;
     @Autowired
     private OAuth2ClientProperties oAuth2ClientProperties;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Autowired
     OAuth2ProtectedResourceDetails oAuth2ProtectedResourceDetails;
@@ -70,12 +72,12 @@ public class UserLoginServiceImpl implements UserLoginService {
 
 //登录获取access_token
     @Override
-    public UserLoginDTOEntity login(@Valid UserEntity loginDto, BindingResult bindingResult, HttpServletResponse response) throws  Exception{
+    public UserLoginDTOEntity login(@Valid SysUserEntity loginDto, BindingResult bindingResult, HttpServletResponse response) throws  Exception{
         if (bindingResult.hasErrors()) {
             throw new Exception("登录信息错误，请确认后再试");
         }
         log.info(loginDto.getUsername()+"---"+loginDto.getPassword());
-        UserEntity user = userDao.findByUsername(loginDto.getUsername());
+        SysUserEntity user = userDao.findByUsername(loginDto.getUsername());
         log.info("user:"+user);
         if (null == user) {
             throw new Exception("用户为空，出错了");
@@ -109,10 +111,12 @@ public class UserLoginServiceImpl implements UserLoginService {
              jwt = client.getToken(client_secret, "password", loginDto.getUsername(), loginDto.getPassword());
         }
        // log.info("jwt.getAccess_token()"+jwt.getAccess_token());
-
+        log.info("jwt----"+jwt);
+        redisTemplate.opsForValue().set("username",loginDto.getUsername());
+        redisTemplate.opsForValue().set("token",jwt.getAccess_token());
+        redisTemplate.opsForValue().set("userId",user.getId());
         CookieUtils.writeCookie(response, "token", jwt.getAccess_token());
         CookieUtils.writeCookie(response, "userinfo", loginDto.getUsername());
-        log.info("jwt----"+jwt);
         UserLoginDTOEntity userLoginDTOEntity =new UserLoginDTOEntity();
         userLoginDTOEntity.setJwt(jwt);
         userLoginDTOEntity.setUser(loginDto);

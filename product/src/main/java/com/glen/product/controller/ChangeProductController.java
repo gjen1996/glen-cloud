@@ -2,6 +2,7 @@ package com.glen.product.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.glen.product.dao.ChangeProductDao;
+import com.glen.product.methodservice.AppcustomerLoginService;
 import com.glen.product.service.ChangeProductService;
 import com.glen.product.utils.PageUtils;
 import com.glen.product.utils.R;
@@ -10,6 +11,10 @@ import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,15 +29,19 @@ public class ChangeProductController {
 	ChangeProductService changeProductService;
 	@Autowired
 	ChangeProductDao changeProductDao;
+	@Autowired
+	AppcustomerLoginService appcustomerLoginService;
 	/** 获取登陆用户所有产品 */
 	@RequestMapping("/changeProduct")
 	@ResponseBody
-	public Map<String,Object> changeProduct(@RequestBody JSONObject data) {
+	public JSONObject changeProduct(@RequestBody JSONObject data){
+		String result =null;
+		JSONObject jSONObject = null;
 		String sharingMode = data.getString("sharingMode");
 		String newProductId = data.getString("newProductId");
 		String iccids = data.getString("iccid");
 		log.info("进入这里:"+sharingMode+"---"+newProductId+"---"+iccids);
-		String result;
+
 		String[] iccidList = iccids.split(",");
 		boolean code = true;
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -54,29 +63,38 @@ public class ChangeProductController {
 				break;
 		}
 		if (list==null||list.isEmpty()||list.size()==0) {
-			map.put("code", code);
-			map.put("errorList", list);
+			jSONObject.put("code", code);
+			jSONObject.put("errorList", list);
 		} else {
-			map.put("code", false);
-			map.put("errorList", list);
+			jSONObject.put("code", false);
+			jSONObject.put("errorList", list);
 		}
-		return map;
+		return jSONObject;
 	}
 	/** 获取登陆用户可变更的产品 */
 	@RequestMapping("/selectProductList")
 	@ResponseBody
 	public JSONArray selectProductList(@RequestBody JSONObject data) {
+        Map<String,Object> getToken = appcustomerLoginService.getToken();
+        log.info("getToken--"+getToken);
 		String sharingMode = data.getString("sharingMode");
-		String username = data.getString("username");
+		String username = getToken.get("username").toString();
+		log.info("username:"+username);
 		List<Map<String,Object>> selectProductList = changeProductDao.getSelectProductType(sharingMode,username);
 		JSONArray result = JSONArray.fromObject(selectProductList);
 		return result;
 	}
 	//页面展示
-//	@RequestMapping("/EditProductQueryPage")
-//	@ResponseBody
-//	public R queryPendingOrder(@RequestParam Map<String, Object> params) throws Exception {
-//		PageUtils page = changeProductService.queryPage(params);
-//		return R.ok().put("page", page);
-//	}
+	@RequestMapping("/EditProductQueryPage")
+	@ResponseBody
+	public JSONObject queryPendingOrder(@RequestBody JSONObject data) throws Exception {
+        Map<String,Object> getToken = appcustomerLoginService.getToken();
+        log.info("getToken--"+getToken);
+        data.put("username",getToken.get("username"));
+        data.put("userId",getToken.get("userId"));
+		PageUtils page = changeProductService.queryPage(data);
+		JSONObject jSONObject = null ;
+		jSONObject.put("page",page);
+		return jSONObject;
+	}
 }
