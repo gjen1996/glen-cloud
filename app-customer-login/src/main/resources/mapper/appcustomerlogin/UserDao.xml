@@ -4,9 +4,9 @@
     <select id="findByUsername"
             resultType="com.glen.appcustomerlogin.entity.SysUserEntity">
 		SELECT
-		*
+		    *
 		FROM
-			user
+			sys_user
 		WHERE
 			username = #{username}
 	</select>
