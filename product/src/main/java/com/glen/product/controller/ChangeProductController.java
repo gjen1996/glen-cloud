@@ -10,11 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.access.prepost.PreAuthorize;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,13 +84,7 @@ public class ChangeProductController {
 	@RequestMapping("/EditProductQueryPage")
 	@ResponseBody
 	public JSONObject queryPendingOrder(@RequestBody JSONObject data) throws Exception {
-        Map<String,Object> getToken = appcustomerLoginService.getToken();
-        log.info("getToken--"+getToken);
-        data.put("username",getToken.get("username"));
-        data.put("userId",getToken.get("userId"));
 		PageUtils page = changeProductService.queryPage(data);
-		JSONObject jSONObject = null ;
-		jSONObject.put("page",page);
-		return jSONObject;
+		return R.ok().put("page", page);
 	}
 }

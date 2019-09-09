@@ -36,4 +36,6 @@ public interface StoreTerminnalDetailService {
     @RequestMapping("/terminnal/changeProduct/updateAllColumnById")
     public Integer updateAllColumnById(@RequestBody JSONObject data);
 
+    @RequestMapping("/terminnal/changeProduct/updateById")
+    public Integer updateById(@RequestBody JSONObject data);
 }

@@ -1,12 +1,14 @@
 package com.glen.product.utils;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * 返回数据
  */
-public class R extends HashMap<String, Object> {
+public class R extends JSONObject {
 	private static final long serialVersionUID = 1L;
 
 	public R() {

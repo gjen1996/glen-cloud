@@ -34,4 +34,11 @@ public class StoreTerminnalDetailServiceImplFallback implements StoreTerminnalDe
         map.put("message","updateAllColumnById方法异常。");
         return 0;
     }
+    @Override
+    public Integer updateById(@RequestBody JSONObject data) {
+        log.info("updateById");
+        Map<String,Object> map= new HashMap<String,Object>();
+        map.put("message","updateById方法异常。");
+        return 0;
+    }
 }

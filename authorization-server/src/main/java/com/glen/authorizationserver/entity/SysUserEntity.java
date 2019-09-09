@@ -1,4 +1,4 @@
-package com.glen.appcustomerlogin.entity;/**
+package com.glen.authorizationserver.entity;/**
  * @author Glen
  * @create 2019- 06-2019/6/28-10:33
  * @Description
@@ -10,8 +10,8 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.glen.appcustomerlogin.group.AddGroup;
-import com.glen.appcustomerlogin.group.UpdateGroup;
+import com.glen.authorizationserver.group.AddGroup;
+import com.glen.authorizationserver.group.UpdateGroup;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,15 +44,14 @@ public class SysUserEntity implements UserDetails,Serializable {
     /**
      * 用户名
      */
-    @TableField("username")
     @NotBlank(message = "用户名不能为空", groups = { AddGroup.class, UpdateGroup.class })
     private String username;
 
     /**
      * 密码
      */
-    @TableField("password")
     @NotBlank(message = "密码不能为空", groups = AddGroup.class)
+    @TableField("password")
     private String password;
 
     /**
@@ -262,6 +261,15 @@ public class SysUserEntity implements UserDetails,Serializable {
         return true;
     }
 
+    /**
+     * 设置：密码
+     *
+     * @param password
+     *            密码
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

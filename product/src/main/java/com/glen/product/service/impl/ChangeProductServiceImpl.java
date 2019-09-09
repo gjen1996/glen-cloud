@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.glen.product.entity.ChangeProductEntity;
 import com.glen.product.dao.ChangeProductDao;
 import com.glen.product.entity.ProductEntity;
+import com.glen.product.methodservice.AppcustomerLoginService;
 import com.glen.product.service.ChangeProductService;
 import com.glen.product.methodservice.MonthsPrepayCardService;
 import com.glen.product.methodservice.StoreTerminnalDetailService;
@@ -36,6 +37,8 @@ public class ChangeProductServiceImpl extends ServiceImpl<ChangeProductDao, Chan
 	private MonthsPrepayCardService monthsPrepayCardService;
 	@Autowired
 	ProductService productService;
+	@Autowired
+	AppcustomerLoginService appcustomerLoginService;
 	//预付到预付
 	@Override
 	public List<String> changePrePayToPrePay(String newProductId,String[] iccids) {
@@ -357,12 +360,13 @@ public class ChangeProductServiceImpl extends ServiceImpl<ChangeProductDao, Chan
 	}
 	@Override
 	public PageUtils queryPage(JSONObject data) throws Exception {
+		Map<String,Object> getToken = appcustomerLoginService.getToken();
 		String showDataType=data.getString("showDataType");
 		String key=data.getString("key");
-		String username = data.getString("username");
+		String username = getToken.get("username").toString();
 		String userList = data.getString("userList");
         JSONArray jsonArray = JSONArray.fromObject(userList);
-		Long userId = Long.parseLong(data.getString("userId"));
+		Long userId = Long.parseLong(getToken.get("userId").toString());
 		Page<ChangeProductEntity> page = null;
 		EntityWrapper<ChangeProductEntity> ew =new EntityWrapper<>();
 		if(showDataType.equals("total")){
@@ -402,6 +406,7 @@ public class ChangeProductServiceImpl extends ServiceImpl<ChangeProductDao, Chan
 		}
         Map<String, Object> params =new HashMap<>();
 		page = this.selectPage(new Query<ChangeProductEntity>(params).getPage(), ew);
+		log.info("page:"+page);
 		return new PageUtils(page);
 	}
 }

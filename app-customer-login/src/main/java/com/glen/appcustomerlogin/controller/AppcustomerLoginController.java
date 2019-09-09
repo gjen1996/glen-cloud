@@ -85,4 +85,8 @@ public class AppcustomerLoginController {
 //        }
 //        log.info("12345:"+username+token);
     }
+    @RequestMapping("/findByUsername/{username}")
+    public SysUserEntity findByUsername(@PathVariable String username) throws Exception {
+        return userDao.findByUsername(username);
+    }
 }
