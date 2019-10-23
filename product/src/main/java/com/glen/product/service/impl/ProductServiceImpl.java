@@ -1,5 +1,6 @@
 package com.glen.product.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -32,8 +33,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductDao, ProductEntity> i
 	StoreTerminnalDetailService storeTerminnalDetailService;
 	/** 查询框 */
 	@Override
-	public PageUtils queryPage(String check, Map<String, Object> params, String username) {
-		String key = (String) params.get("key");
+	public PageUtils queryPage(String check, JSONObject data, String username) {
+		String key = data.getString("key");
 		Page<ProductEntity> page = null;
 		EntityWrapper<ProductEntity> ew = new EntityWrapper<ProductEntity>();
 		if (key == null || "".equals(key)) {
@@ -44,7 +45,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductDao, ProductEntity> i
 			 }else{
 				 ew.andNew().where("1=1 and is_delete = 0 and(status = 'added' or create_user ='"+username+"')");
 			 }
-			 page = this.selectPage(new Query<ProductEntity>(params).getPage(), ew);
+			 page = this.selectPage(new Query<ProductEntity>(data).getPage(), ew);
 			 return new PageUtils(page);
 		} else {
 			 if("productCheck".equals(check)){
@@ -54,7 +55,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductDao, ProductEntity> i
 			 }else{
 				 ew.andNew().where("1=1 and is_delete = 0 and (create_user='"+username+"' or status='added' )").andNew().like("product_id", key).or().like("product_name", key).or().like("owner", key);
 			 }
-			page = this.selectPage(new Query<ProductEntity>(params).getPage(), ew);
+			page = this.selectPage(new Query<ProductEntity>(data).getPage(), ew);
 			return new PageUtils(page);
 		}
 		

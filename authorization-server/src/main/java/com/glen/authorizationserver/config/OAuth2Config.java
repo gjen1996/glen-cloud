@@ -122,6 +122,7 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
                 .tokenEnhancer(jwtTokenEnhancer())
                 // 配置安全认证管理
                 .authenticationManager(authenticationManager);
+             endpoints.userDetailsService(userServiceDetail);
 //        endpoints
 //                //指定认证管理器
 //                .authenticationManager(authenticationManager)
@@ -151,4 +152,5 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
                 .checkTokenAccess("isAuthenticated()") //url:/oauth/check_token allow check token
                 .allowFormAuthenticationForClients();
     }
+
 }

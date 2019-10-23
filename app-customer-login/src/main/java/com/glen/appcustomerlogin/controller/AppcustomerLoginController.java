@@ -9,13 +9,15 @@ package com.glen.appcustomerlogin.controller;/**
  * @create 2019/7/9 17:21
  * @Description
  */
+import com.alibaba.fastjson.JSONObject;
 import com.glen.appcustomerlogin.config.BPwdEncoderUtil;
-import com.glen.appcustomerlogin.dao.UserDao;
+import com.glen.appcustomerlogin.dao.SysUserDao;
 import com.glen.appcustomerlogin.entity.SysUserEntity;
 import com.glen.appcustomerlogin.entity.UserLoginDTOEntity;
 import com.glen.appcustomerlogin.service.UserLoginService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -34,9 +36,13 @@ public class AppcustomerLoginController {
     @Autowired
     UserLoginService userLoginService;
     @Autowired
-    private UserDao userDao;
+    private SysUserDao sysUserDao;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Value("${security.oauth2.client.client-id}")
+    private String client_id;
+    @Value("${security.oauth2.client.client-secret}")
+    private String client_secret;
     @RequestMapping("/login")
     public UserLoginDTOEntity login(@Valid SysUserEntity loginDto, BindingResult bindingResult, HttpServletResponse response) throws Exception {
         return userLoginService.login(loginDto,bindingResult,response);
@@ -47,7 +53,7 @@ public class AppcustomerLoginController {
         SysUserEntity user=new SysUserEntity();
         user.setUsername(username);
         user.setPassword(BPwdEncoderUtil.BCryptPassword(password));
-        userDao.insert(user);
+        sysUserDao.insert(user);
         return user;
     }
     @RequestMapping("/foo")
@@ -57,16 +63,17 @@ public class AppcustomerLoginController {
     }
 
     @RequestMapping("/getToken")
-    public Map<String,Object> getToken(HttpServletRequest request){
-        Map<String,Object> map =new HashMap<>();
+    public JSONObject getToken(HttpServletRequest request){
+        JSONObject data =new JSONObject();
         String username = redisTemplate.opsForValue().get("username").toString();
         String token = redisTemplate.opsForValue().get("token").toString();
         String userId = redisTemplate.opsForValue().get("userId").toString();
-        map.put("username",username);
-        map.put("token",token);
-        map.put("userId",userId);
         log.info("redis:"+username+token);
-        return map;
+        data.put("username",username);
+        data.put("token",token);
+        data.put("userId",userId);
+        log.info("data:"+data);
+        return data;
 //        Cookie[] cookies = request.getCookies();
 //        if (cookies != null && cookies.length != 0) {
 //            Cookie[] var = cookies;
@@ -87,6 +94,14 @@ public class AppcustomerLoginController {
     }
     @RequestMapping("/findByUsername/{username}")
     public SysUserEntity findByUsername(@PathVariable String username) throws Exception {
-        return userDao.findByUsername(username);
+        return sysUserDao.findByUsername(username);
+    }
+    @RequestMapping("/getNewToken")
+    public JSONObject getNewToken() {
+
+        String refreshToken = redisTemplate.opsForValue().get("refreshToken").toString();
+        log.info("client_id:"+client_id+"--"+"client_secret:"+client_secret+"--"+"refreshToken:"+refreshToken);
+        userLoginService.getNewToken(client_id,client_secret,refreshToken,"refresh_token");
+        return  null;
     }
 }

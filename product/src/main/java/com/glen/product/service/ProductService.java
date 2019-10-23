@@ -1,5 +1,6 @@
 package com.glen.product.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.service.IService;
 import com.glen.product.entity.ProductEntity;
 import com.glen.product.utils.PageUtils;
@@ -14,7 +15,7 @@ public interface ProductService extends IService<ProductEntity> {
 	 * 获取所有的产品
 	 * 
 	 * */
-	PageUtils queryPage(String check, Map<String, Object> params, String username);
+	PageUtils queryPage(String check, JSONObject data, String username);
 
 
 	/**

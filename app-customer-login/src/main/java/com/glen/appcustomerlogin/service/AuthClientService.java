@@ -24,5 +24,9 @@ public interface AuthClientService {
                        @RequestParam("username") String username,
                        @RequestParam("password") String password);
 
-
+    @PostMapping("/oauth/token")
+    JWTEntity getNewToken(@RequestHeader("refresh_token") String refresh_token,
+                       @RequestParam("grant_type") String grant_type,
+                       @RequestParam("client_id") String client_id,
+                       @RequestParam("client_secret") String client_secret);
 }

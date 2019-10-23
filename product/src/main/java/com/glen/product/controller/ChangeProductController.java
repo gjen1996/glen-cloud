@@ -71,11 +71,11 @@ public class ChangeProductController {
 	@RequestMapping("/selectProductList")
 	@ResponseBody
 	public JSONArray selectProductList(@RequestBody JSONObject data) {
-        Map<String,Object> getToken = appcustomerLoginService.getToken();
+        JSONObject getToken = appcustomerLoginService.getToken();
+		String username = getToken.getString("username");
         log.info("getToken--"+getToken);
-		String sharingMode = data.getString("sharingMode");
-		String username = getToken.get("username").toString();
 		log.info("username:"+username);
+		String sharingMode = data.getString("sharingMode");
 		List<Map<String,Object>> selectProductList = changeProductDao.getSelectProductType(sharingMode,username);
 		JSONArray result = JSONArray.fromObject(selectProductList);
 		return result;

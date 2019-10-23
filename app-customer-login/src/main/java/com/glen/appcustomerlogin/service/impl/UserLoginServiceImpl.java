@@ -4,13 +4,14 @@ package com.glen.appcustomerlogin.service.impl;/**
  * @Description
  */
 
+import com.auth0.jwt.JWT;
 import com.glen.appcustomerlogin.config.BPwdEncoderUtil;
+import com.glen.appcustomerlogin.dao.SysUserDao;
 import com.glen.appcustomerlogin.entity.JWTEntity;
 import com.glen.appcustomerlogin.entity.SysUserEntity;
 import com.glen.appcustomerlogin.entity.UserLoginDTOEntity;
 import com.glen.appcustomerlogin.service.AuthClientService;
 import com.glen.appcustomerlogin.service.UserLoginService;
-import com.glen.appcustomerlogin.dao.UserDao;
 import com.glen.appcustomerlogin.util.CookieUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ import java.util.Collections;
 @Slf4j
 public class UserLoginServiceImpl implements UserLoginService {
     @Autowired
-    private UserDao userDao;
+    private SysUserDao sysUserDao;
     @Autowired
     private OAuth2ClientProperties oAuth2ClientProperties;
     @Autowired
@@ -77,7 +78,7 @@ public class UserLoginServiceImpl implements UserLoginService {
             throw new Exception("登录信息错误，请确认后再试");
         }
         log.info(loginDto.getUsername()+"---"+loginDto.getPassword());
-        SysUserEntity user = userDao.findByUsername(loginDto.getUsername());
+        SysUserEntity user = sysUserDao.findByUsername(loginDto.getUsername());
         log.info("user:"+user);
         if (null == user) {
             throw new Exception("用户为空，出错了");
@@ -115,6 +116,7 @@ public class UserLoginServiceImpl implements UserLoginService {
         redisTemplate.opsForValue().set("username",loginDto.getUsername());
         redisTemplate.opsForValue().set("token",jwt.getAccess_token());
         redisTemplate.opsForValue().set("userId",user.getId());
+        redisTemplate.opsForValue().set("refreshToken",jwt.getRefresh_token());
         CookieUtils.writeCookie(response, "token", jwt.getAccess_token());
         CookieUtils.writeCookie(response, "userinfo", loginDto.getUsername());
         UserLoginDTOEntity userLoginDTOEntity =new UserLoginDTOEntity();
@@ -132,5 +134,37 @@ public class UserLoginServiceImpl implements UserLoginService {
 //        log.info("re----"+re);
 //        log.info("re12----"+restTemplate.exchange(accessTokenUri, HttpMethod.POST,httpEntity,OAuth2AccessToken.class));
 //        return restTemplate.exchange(accessTokenUri, HttpMethod.POST,httpEntity,OAuth2AccessToken.class);
+    }
+    @Override
+    public JWTEntity getNewToken(String client_id, String client_secret, String refresh_token, String grant_type){
+    //第一种方式获取jwt
+    // 从auth-service获取JWT
+    JWTEntity jwt = client.getToken(client_id,client_secret, refresh_token, grant_type);
+        if(jwt == null){
+        jwt = client.getToken(client_id,client_secret, refresh_token, grant_type);
+    }
+    // log.info("jwt.getAccess_token()"+jwt.getAccess_token());
+        log.info("jwt----"+jwt);
+//        redisTemplate.opsForValue().set("username",loginDto.getUsername());
+//        redisTemplate.opsForValue().set("token",jwt.getAccess_token());
+//        redisTemplate.opsForValue().set("userId",user.getId());
+//        CookieUtils.writeCookie(response, "token", jwt.getAccess_token());
+//        CookieUtils.writeCookie(response, "userinfo", loginDto.getUsername());
+//    UserLoginDTOEntity userLoginDTOEntity =new UserLoginDTOEntity();
+//        userLoginDTOEntity.setJwt(jwt);
+//        userLoginDTOEntity.setUser(loginDto);
+//        return userLoginDTOEntity;
+//        //第二种方式获取
+//        ResponseEntity<OAuth2AccessToken> re =restTemplate.exchange(oAuth2ProtectedResourceDetails.getAccessTokenUri(), HttpMethod.POST,httpEntity,OAuth2AccessToken.class);
+//        if (re.getStatusCode() != HttpStatus.OK) {
+//            log.debug("failed to authenticate user with OAuth2 token endpoint, status: {}",
+//                    re.getStatusCodeValue());
+//            throw new HttpClientErrorException(re.getStatusCode());
+//        }
+//        OAuth2AccessToken oAuth2AccessToken = re.getBody();
+//        log.info("re----"+re);
+//        log.info("re12----"+restTemplate.exchange(accessTokenUri, HttpMethod.POST,httpEntity,OAuth2AccessToken.class));
+//        return restTemplate.exchange(accessTokenUri, HttpMethod.POST,httpEntity,OAuth2AccessToken.class);
+        return jwt;
     }
 }

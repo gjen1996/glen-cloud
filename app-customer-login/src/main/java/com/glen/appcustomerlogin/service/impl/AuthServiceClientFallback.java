@@ -25,4 +25,12 @@ public class AuthServiceClientFallback implements AuthClientService {
        log.info("Fallback of getToken is executed");
         return null;
     }
+    @Override
+    public JWTEntity getNewToken(String client_id,
+                                 String client_secret,
+                                 String refresh_token,
+                                 String grant_type){
+        log.info("Fallback of getToken is executed");
+        return null;
+    }
 }

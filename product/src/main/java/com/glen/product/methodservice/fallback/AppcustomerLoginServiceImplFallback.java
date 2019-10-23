@@ -24,7 +24,7 @@ public class AppcustomerLoginServiceImplFallback implements AppcustomerLoginServ
   * @Description
   */
     @Override
-    public Map<String,Object> getToken() {
+    public JSONObject getToken() {
         log.info("getToken方法异常");
         return null;
     }

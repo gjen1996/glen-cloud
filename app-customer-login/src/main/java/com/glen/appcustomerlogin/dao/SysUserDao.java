@@ -8,7 +8,7 @@ import com.glen.appcustomerlogin.entity.SysUserEntity;
  * @create 2019/6/28 10:32 
  * @Description
  */
-public interface UserDao extends BaseMapper<SysUserEntity> {
+public interface SysUserDao extends BaseMapper<SysUserEntity> {
     SysUserEntity findByUsername(String username);
 }
 

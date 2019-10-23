@@ -23,5 +23,5 @@ import java.util.Map;
 public interface AppcustomerLoginService {
 
     @RequestMapping("/user/getToken")
-    Map<String,Object> getToken();
+    JSONObject getToken();
 }
