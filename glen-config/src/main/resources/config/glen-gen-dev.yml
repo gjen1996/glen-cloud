@@ -6,8 +6,12 @@ spring:
     username: root
   jpa:
     hibernate:
-      ddl-auto: update
-      show-sql: true
+      hbn2ddl_auto: true
+      hbm2ddl:
+        auto: update
+      show_sql: true
+      dialect: org.hibernate.dialect.MySQL57Dialect
+      format_sql: true
   main:
     allow-bean-definition-overriding: true
   redis:
