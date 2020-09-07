@@ -16,7 +16,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 
 /**
  * @author Glen
- * @create 2019/6/28 10:57 
+ * @create 2019/6/28 10:57
  * @Description
  */
 @Configuration
@@ -34,7 +34,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/oauth/**","/oauth/token").permitAll()
+                .antMatchers("/oauth/**", "/oauth/token").permitAll()
                 .antMatchers("/**").authenticated();
     }
 

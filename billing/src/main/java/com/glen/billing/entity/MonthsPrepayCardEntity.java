@@ -15,7 +15,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author chenkb3
@@ -69,9 +69,9 @@ public class MonthsPrepayCardEntity extends Model<MonthsPrepayCardEntity> {
     private Integer cycleId;
     /**
      * 用来标记该卡当前是否计费。
-0：初始状态，还在算流量
-1：当前周期已经结束，可以进行计费
-2：已经计费出账
+     * 0：初始状态，还在算流量
+     * 1：当前周期已经结束，可以进行计费
+     * 2：已经计费出账
      */
     @TableField("fee_status")
     private Integer feeStatus;
@@ -80,16 +80,16 @@ public class MonthsPrepayCardEntity extends Model<MonthsPrepayCardEntity> {
      */
     @TableField("fee_time")
     private Date feeTime;
-    
+
     @TableField("product_id")
     private String productId;
-    
+
     @TableField("account_id")
     private String accountId;
-    
+
     @TableField("user_id")
     private String userId;
-    
+
     @Override
     protected Serializable pkVal() {
         return this.id;

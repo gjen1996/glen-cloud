@@ -30,7 +30,7 @@ import java.util.List;
  */
 @TableName("sys_user")
 @Data
-public class SysUserEntity implements UserDetails,Serializable {
+public class SysUserEntity implements UserDetails, Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -45,7 +45,7 @@ public class SysUserEntity implements UserDetails,Serializable {
      * 用户名
      */
     @TableField("username")
-    @NotBlank(message = "用户名不能为空", groups = { AddGroup.class, UpdateGroup.class })
+    @NotBlank(message = "用户名不能为空", groups = {AddGroup.class, UpdateGroup.class})
     private String username;
 
     /**
@@ -63,8 +63,8 @@ public class SysUserEntity implements UserDetails,Serializable {
     /**
      * 邮箱
      */
-    @NotBlank(message = "邮箱不能为空", groups = { AddGroup.class, UpdateGroup.class })
-    @Email(message = "邮箱格式不正确", groups = { AddGroup.class, UpdateGroup.class })
+    @NotBlank(message = "邮箱不能为空", groups = {AddGroup.class, UpdateGroup.class})
+    @Email(message = "邮箱格式不正确", groups = {AddGroup.class, UpdateGroup.class})
     private String email;
 
     /**
@@ -92,7 +92,7 @@ public class SysUserEntity implements UserDetails,Serializable {
     /**
      * 部门ID
      */
-    @NotNull(message = "部门不能为空", groups = { AddGroup.class, UpdateGroup.class })
+    @NotNull(message = "部门不能为空", groups = {AddGroup.class, UpdateGroup.class})
     private Long deptId;
 
     /**
@@ -276,8 +276,7 @@ public class SysUserEntity implements UserDetails,Serializable {
     /**
      * 设置：邮箱
      *
-     * @param email
-     *            邮箱
+     * @param email 邮箱
      */
     public void setEmail(String email) {
         this.email = email;
@@ -295,8 +294,7 @@ public class SysUserEntity implements UserDetails,Serializable {
     /**
      * 设置：手机号
      *
-     * @param mobile
-     *            手机号
+     * @param mobile 手机号
      */
     public void setMobile(String mobile) {
         this.mobile = mobile;
@@ -314,8 +312,7 @@ public class SysUserEntity implements UserDetails,Serializable {
     /**
      * 设置：状态 0：禁用 1：正常
      *
-     * @param status
-     *            状态 0：禁用 1：正常
+     * @param status 状态 0：禁用 1：正常
      */
     public void setStatus(Integer status) {
         this.status = status;
@@ -333,8 +330,7 @@ public class SysUserEntity implements UserDetails,Serializable {
     /**
      * 设置：创建时间
      *
-     * @param createTime
-     *            创建时间
+     * @param createTime 创建时间
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author Glen
- * @create 2019/6/28 11:30 
+ * @create 2019/6/28 11:30
  * @Description
  */
 @Slf4j
@@ -22,14 +22,15 @@ public class AuthServiceClientFallback implements AuthClientService {
                               String grant_type,
                               String username,
                               String password) {
-       log.info("Fallback of getToken is executed");
+        log.info("Fallback of getToken is executed");
         return null;
     }
+
     @Override
     public JWTEntity getNewToken(String client_id,
                                  String client_secret,
                                  String refresh_token,
-                                 String grant_type){
+                                 String grant_type) {
         log.info("Fallback of getToken is executed");
         return null;
     }

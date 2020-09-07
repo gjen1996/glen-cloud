@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.glen</groupId>
-    <artifactId>gateway-server</artifactId>
+    <artifactId>glen-gateway</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>gateway-server</name>
+    <name>glen-gateway</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>

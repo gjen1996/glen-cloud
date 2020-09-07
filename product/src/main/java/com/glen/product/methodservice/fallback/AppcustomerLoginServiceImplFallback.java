@@ -12,17 +12,17 @@ import java.util.Map;
 
 /**
  * @author Glen
- * @create 2019/6/26 10:25 
+ * @create 2019/6/26 10:25
  * @Description
  */
 @Component
 @Slf4j
 public class AppcustomerLoginServiceImplFallback implements AppcustomerLoginService {
-/**
-  * @author Glen
-  * @date 2019/8/29 16:13
-  * @Description
-  */
+    /**
+     * @author Glen
+     * @date 2019/8/29 16:13
+     * @Description
+     */
     @Override
     public JSONObject getToken() {
         log.info("getToken方法异常");

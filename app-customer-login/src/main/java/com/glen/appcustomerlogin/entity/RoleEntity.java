@@ -16,7 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 /**
  * @author Glen
- * @create 2019/6/28 10:35 
+ * @create 2019/6/28 10:35
  * @Description
  */
 @Data

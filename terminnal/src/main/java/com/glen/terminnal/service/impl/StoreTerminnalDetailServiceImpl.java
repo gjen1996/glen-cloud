@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author wemoucy
@@ -24,11 +24,11 @@ import java.util.Map;
 @Slf4j
 public class StoreTerminnalDetailServiceImpl extends ServiceImpl<StoreTerminnalDetailDao, StoreTerminnalDetailEntity> implements StoreTerminnalDetailService {
 
-	@Override
-	public StoreTerminnalDetailEntity getStoreTerminalByIccid(String iccid) {
-		EntityWrapper<StoreTerminnalDetailEntity> ew = new EntityWrapper<>();
-		ew.eq("iccid",iccid);
-		return this.selectOne(ew);
-	}
-	
+    @Override
+    public StoreTerminnalDetailEntity getStoreTerminalByIccid(String iccid) {
+        EntityWrapper<StoreTerminnalDetailEntity> ew = new EntityWrapper<>();
+        ew.eq("iccid", iccid);
+        return this.selectOne(ew);
+    }
+
 }

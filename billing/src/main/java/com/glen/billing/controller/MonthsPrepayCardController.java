@@ -18,23 +18,26 @@ import java.util.Map;
 @Slf4j
 public class MonthsPrepayCardController {
 
-	@Autowired
-	MonthsPrepayCardService monthsPrepayCardService;
-	/** 获取登陆用户所有产品 */
+    @Autowired
+    MonthsPrepayCardService monthsPrepayCardService;
 
-	@RequestMapping("/changePlanTime")
-	public String changePlanTime(@RequestBody JSONObject data) {
-		String iccid = data.getString("iccid");
-		String result;
-		if(monthsPrepayCardService.changePlanTime(iccid)==null) {
-			result = "error";
-		}else{
-			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
-			java.util.Date date=new java.util.Date();
-			result = sdf.format(monthsPrepayCardService.changePlanTime(iccid));
-		}
-		monthsPrepayCardService.changePlanTime(iccid);
-		return result;
-	}
+    /**
+     * 获取登陆用户所有产品
+     */
+
+    @RequestMapping("/changePlanTime")
+    public String changePlanTime(@RequestBody JSONObject data) {
+        String iccid = data.getString("iccid");
+        String result;
+        if (monthsPrepayCardService.changePlanTime(iccid) == null) {
+            result = "error";
+        } else {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+            java.util.Date date = new java.util.Date();
+            result = sdf.format(monthsPrepayCardService.changePlanTime(iccid));
+        }
+        monthsPrepayCardService.changePlanTime(iccid);
+        return result;
+    }
 
 }

@@ -16,23 +16,24 @@ import java.util.Map;
 
 /**
  * @author Glen
- * @create 2019/6/24 17:04 
+ * @create 2019/6/24 17:04
  * @Description
  */
-@FeignClient(value="terminnal", fallback = StoreTerminnalDetailServiceImplFallback.class)
+@FeignClient(value = "terminnal", fallback = StoreTerminnalDetailServiceImplFallback.class)
 public interface StoreTerminnalDetailService {
     /*/**
-      * @author Glen
-      * @date 2019/8/29 11:02
-      * @Description
-      */
+     * @author Glen
+     * @date 2019/8/29 11:02
+     * @Description
+     */
     @RequestMapping("/terminnal/changeProduct/getStoreTerminalByIccid/{iccid}")
     public Map<String, Object> getStoreTerminalByIccid(@PathVariable String iccid);
+
     /*/**
-      * @author Glen
-      * @date 2019/8/29 11:03
-      * @Description
-      */
+     * @author Glen
+     * @date 2019/8/29 11:03
+     * @Description
+     */
     @RequestMapping("/terminnal/changeProduct/updateAllColumnById")
     public Integer updateAllColumnById(@RequestBody JSONObject data);
 

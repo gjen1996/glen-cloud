@@ -23,23 +23,24 @@ import java.util.Date;
 @Service
 @Slf4j
 public class MonthsPrepayCardServiceImpl extends ServiceImpl<MonthsPrepayCardDao, MonthsPrepayCardEntity>
-		implements MonthsPrepayCardService {
+        implements MonthsPrepayCardService {
 
-	@Override
-	public Date changePlanTime(String iccid) {
-		Integer id = getMaxIdByIccid(iccid);
-		if (id == null) {
-			return null;
-		} else {
-			return this.selectById(id).getCycleEnd();
-		}
-	}
-	private Integer getMaxIdByIccid(String iccid) {
-		EntityWrapper<MonthsPrepayCardEntity> ew = new EntityWrapper<>();
-		ew.setSqlSelect("Max(id)");
-		ew.eq("iccid", iccid);
-		Object obj = this.selectObj(ew);
-		return (Integer) obj;
-	}
+    @Override
+    public Date changePlanTime(String iccid) {
+        Integer id = getMaxIdByIccid(iccid);
+        if (id == null) {
+            return null;
+        } else {
+            return this.selectById(id).getCycleEnd();
+        }
+    }
+
+    private Integer getMaxIdByIccid(String iccid) {
+        EntityWrapper<MonthsPrepayCardEntity> ew = new EntityWrapper<>();
+        ew.setSqlSelect("Max(id)");
+        ew.eq("iccid", iccid);
+        Object obj = this.selectObj(ew);
+        return (Integer) obj;
+    }
 
 }

@@ -150,13 +150,13 @@ public class StoreTerminnalDetailEntity extends Model<StoreTerminnalDetailEntity
      */
     @TableField("is_manual")
     private Integer isManual;
-    
+
     @TableField(exist = false)
     private BigDecimal monthToDateUsage;
-    
+
     @TableField(exist = false)
     private String productName;
-    
+
     @TableField(exist = false)
     private String idForProductShow;
 

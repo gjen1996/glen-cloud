@@ -5,7 +5,7 @@ import com.glen.appcustomerlogin.entity.SysUserEntity;
 
 /**
  * @author Glen
- * @create 2019/6/28 10:32 
+ * @create 2019/6/28 10:32
  * @Description
  */
 public interface SysUserDao extends BaseMapper<SysUserEntity> {

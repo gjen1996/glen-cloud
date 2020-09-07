@@ -16,10 +16,10 @@ import java.util.Map;
 
 /**
  * @author Glen
- * @create 2019/6/24 17:04 
+ * @create 2019/6/24 17:04
  * @Description
  */
-@FeignClient(value="app-customer-login", fallback = AppcustomerLoginServiceImplFallback.class)
+@FeignClient(value = "app-customer-login", fallback = AppcustomerLoginServiceImplFallback.class)
 public interface AppcustomerLoginService {
 
     @RequestMapping("/user/getToken")

@@ -2,6 +2,9 @@ package com.glen.appcustomerlogin.entity;/**
  * @author Glen
  * @create 2019- 06-2019/6/28-11:32
  * @Description
+ * @author Glen
+ * @create 2019/6/28 11:32
+ * @Description
  */
 
 /**

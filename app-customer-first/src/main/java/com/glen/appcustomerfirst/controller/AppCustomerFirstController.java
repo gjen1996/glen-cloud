@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Glen
- * @create 2019/6/24 17:02 
+ * @create 2019/6/24 17:02
  * @Description
  */
 @RestController

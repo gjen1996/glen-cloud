@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan("com.glen")
 @EnableDiscoveryClient
 @SpringBootApplication
-public class GatewayServerApplication{
+public class GatewayServerApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(GatewayServerApplication.class, args);

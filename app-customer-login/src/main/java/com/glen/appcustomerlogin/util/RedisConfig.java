@@ -26,7 +26,9 @@ import java.util.Set;
 @Configuration
 @EnableCaching  //继承CachingConfigurerSupport并重写方法，配合该注解实现spring缓存框架的使用
 public class RedisConfig extends CachingConfigurerSupport {
-    /**载入配置文件配置的连接工厂**/
+    /**
+     * 载入配置文件配置的连接工厂
+     **/
     @Autowired
     RedisConnectionFactory redisConnectionFactory;
     /*不提示警告信息*/
@@ -35,8 +37,8 @@ public class RedisConfig extends CachingConfigurerSupport {
     RedisTemplate redisTemplate;
 
     @Bean
-    RedisTemplate<String,Object> objectRedisTemplate(){
-        RedisTemplate<String,Object> redisTemplate=new RedisTemplate<>();
+    RedisTemplate<String, Object> objectRedisTemplate() {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
 
         redisTemplate.setKeySerializer(new StringRedisSerializer()); // key的序列化类型
         redisTemplate.setValueSerializer(new RedisObjectSerializer()); // value的序列化类型
@@ -46,17 +48,17 @@ public class RedisConfig extends CachingConfigurerSupport {
     }
 
     /**
-     *    设置缓存过期时间，默认不过期，需要过期的在此处添加cacheName
+     * 设置缓存过期时间，默认不过期，需要过期的在此处添加cacheName
      */
     @Bean
     public CacheManager cacheManager() {
 
         RedisCacheManager cacheManager;
 
-        RedisCacheConfiguration cacheConfiguration =RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofDays(1))//缓存1天
+        RedisCacheConfiguration cacheConfiguration = RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofDays(1))//缓存1天
                 .disableCachingNullValues();
         // 设置一个初始化的缓存空间set集合
-        Set<String> cacheNames =  new HashSet<>();
+        Set<String> cacheNames = new HashSet<>();
         cacheNames.add("login");
 
         // 对每个缓存空间应用不同的配置
@@ -75,6 +77,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     /**
      * 重写缓存key生成策略，可根据自身业务需要进行自己的配置生成条件
+     *
      * @return
      */
     @Bean

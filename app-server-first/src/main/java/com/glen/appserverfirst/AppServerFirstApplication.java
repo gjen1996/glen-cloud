@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableDiscoveryClient
 @SpringBootApplication
 @EnableFeignClients
-public class AppServerFirstApplication{
+public class AppServerFirstApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(AppServerFirstApplication.class, args);

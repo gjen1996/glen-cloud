@@ -25,156 +25,174 @@ import java.util.Map;
 @Service
 public class ProductServiceImpl extends ServiceImpl<ProductDao, ProductEntity> implements ProductService {
 
-	@Autowired
+    @Autowired
     HttpServletRequest request;
-	//@Autowired
-	//EditTerminalService editTerminalService;
-	@Autowired
-	StoreTerminnalDetailService storeTerminnalDetailService;
-	/** 查询框 */
-	@Override
-	public PageUtils queryPage(String check, JSONObject data, String username) {
-		String key = data.getString("key");
-		Page<ProductEntity> page = null;
-		EntityWrapper<ProductEntity> ew = new EntityWrapper<ProductEntity>();
-		if (key == null || "".equals(key)) {
-			 if("productCheck".equals(check)){
-				 ew.andNew().where("1=1", 1).eq("product_check", 1);
-			 }else if("releaseCheck".equals(check)){
-				 ew.andNew().where("1=1", 1).eq("release_check", 1);
-			 }else{
-				 ew.andNew().where("1=1 and is_delete = 0 and(status = 'added' or create_user ='"+username+"')");
-			 }
-			 page = this.selectPage(new Query<ProductEntity>(data).getPage(), ew);
-			 return new PageUtils(page);
-		} else {
-			 if("productCheck".equals(check)){
-				 ew.andNew().where("1=1 and product_check=1 ").andNew().like("product_id", key).or().like("product_name", key).or().like("owner", key);
-			 }else if("releaseCheck".equals(check)){
-				 ew.andNew().where("1=1  and release_check=1").andNew().like("product_id", key).or().like("product_name", key).or().like("owner", key);
-			 }else{
-				 ew.andNew().where("1=1 and is_delete = 0 and (create_user='"+username+"' or status='added' )").andNew().like("product_id", key).or().like("product_name", key).or().like("owner", key);
-			 }
-			page = this.selectPage(new Query<ProductEntity>(data).getPage(), ew);
-			return new PageUtils(page);
-		}
-		
-	}
-	
-	@Override
-	public void changeStatusToAdded() {
-		baseMapper.changeStatusToAdded();
-	}
+    //@Autowired
+    //EditTerminalService editTerminalService;
+    @Autowired
+    StoreTerminnalDetailService storeTerminnalDetailService;
 
-	@Override
-	public void changeStatusToDismounted() {
-		baseMapper.changeStatusToDismounted();
-	}
-	
-	/** 筛选器 */
-	@Override
-	public PageUtils querySelectPage(String check,Map<String, Object> params,String username) {
-		String productId = (String) params.get("productId");
-		String productName = (String) params.get("productName");
-		String startDate = (String) params.get("startDate");
-		String endDate = (String) params.get("endDate");
-		String owner = (String) params.get("owner");
-		String status = (String) params.get("status");
-		Page<ProductEntity> page = null;
-		EntityWrapper<ProductEntity> ew = new EntityWrapper<ProductEntity>();
-		if ("".equals(productId) && "".equals(productName) && "".equals(startDate) && "".equals(endDate) && "".equals(owner)&&("".equals(status))) {
-			 if("productCheck".equals(check)){
-				 ew.andNew().where("1=1", 1).eq("product_check", 1);
-			 }else if("releaseCheck".equals(check)){
-				 ew.andNew().where("1=1", 1).eq("release_check", 1);
-			 }else{
-				 ew.andNew().where("1=1 and is_delete = 0").eq("create_user", username).or().eq("status", "added");
-			 }
-			page = this.selectPage(new Query<ProductEntity>(params).getPage(), ew);
-			return new PageUtils(page);
-		} else {
-			 if("productCheck".equals(check)){
-				 ew.andNew().where("1 =1 ").eq("product_check", 1).like("product_id", productId).like("product_name", productName).like("owner", owner); 
-			 }else if("releaseCheck".equals(check)){
-				 ew.andNew().where("1 =1 ").eq("release_check", 1).like("product_id", productId).like("product_name", productName).like("owner", owner); 
-			 }else{
-				 ew.andNew().where("is_delete = 0 and  (create_user='"+username+"' or status='added' )").like("product_id", productId).like("product_name", productName).like("owner", owner).like("status", status);
-				 if(!"".equals(status)){
-					 ew.eq("status", status);
-				 }
-			 }
-			if(!"".equals(startDate)){
-				ew.ge("added_date", startDate);
-			}
-			if(!"".equals(endDate)){
-				ew.le("dismounted_date", endDate);
-			}
-			page = this.selectPage(new Query<ProductEntity>(params).getPage(), ew);
-			return new PageUtils(page);
-		}
-	}
-	/**查询单个产品 */
-	@Override
-	public ProductEntity selectOneProduct(int id) {
-		
-		ProductEntity productEntity = this.selectById(id);
-			return productEntity;
-	}
+    /**
+     * 查询框
+     */
+    @Override
+    public PageUtils queryPage(String check, JSONObject data, String username) {
+        String key = data.getString("key");
+        Page<ProductEntity> page = null;
+        EntityWrapper<ProductEntity> ew = new EntityWrapper<ProductEntity>();
+        if (key == null || "".equals(key)) {
+            if ("productCheck".equals(check)) {
+                ew.andNew().where("1=1", 1).eq("product_check", 1);
+            } else if ("releaseCheck".equals(check)) {
+                ew.andNew().where("1=1", 1).eq("release_check", 1);
+            } else {
+                ew.andNew().where("1=1 and is_delete = 0 and(status = 'added' or create_user ='" + username + "')");
+            }
+            page = this.selectPage(new Query<ProductEntity>(data).getPage(), ew);
+            return new PageUtils(page);
+        } else {
+            if ("productCheck".equals(check)) {
+                ew.andNew().where("1=1 and product_check=1 ").andNew().like("product_id", key).or().like("product_name", key).or().like("owner", key);
+            } else if ("releaseCheck".equals(check)) {
+                ew.andNew().where("1=1  and release_check=1").andNew().like("product_id", key).or().like("product_name", key).or().like("owner", key);
+            } else {
+                ew.andNew().where("1=1 and is_delete = 0 and (create_user='" + username + "' or status='added' )").andNew().like("product_id", key).or().like("product_name", key).or().like("owner", key);
+            }
+            page = this.selectPage(new Query<ProductEntity>(data).getPage(), ew);
+            return new PageUtils(page);
+        }
 
-	/**删除产品 */
-	@Override
-	public boolean deleteProductById(int id) {
-		boolean code = baseMapper.deleteProductById(id);
-		return code;
-	}
+    }
 
-	/** 新增产品 */
-	@Override
-	public boolean saveProduct(ProductEntity productEntity) {	
-		Date createDate = new Date(System.currentTimeMillis());
-		productEntity.setCreateDate(createDate);
-		String today = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
-		String productId ="CP"+today;
-		int data =Integer.parseInt(productEntity.getData().toString());
-		String Unit="M";
-		if((data>=1024)){
-			data=data/1024;
-			Unit = "G";
-		 }
-		String ratePlanName=productEntity.getOwner()+"_"+productEntity.getSharingMode()+"_"+data+Unit;
-		productEntity.setRatePlanName(ratePlanName);
-		productEntity.setProductId(productId);
-		boolean code = this.insert(productEntity);	
-		return code;
-	}
-	
-	/**修改产品 */
-	@Override
-	public boolean updateProduct(ProductEntity productEntity) {
-		productEntity.setStatus("design");
-		productEntity.setProductCheck(0);
-		productEntity.setReleaseCheck(0);
-		int data =Integer.parseInt(productEntity.getData().toString());
-		String Unit="M";
-		if((data>=1024)){
-			data=data/1024;
-			Unit = "G";
-		 }
-		
-		 String ratePlanName=productEntity.getOwner()+"_"+productEntity.getSharingMode()+"_"+data+Unit;
-		productEntity.setRatePlanName(ratePlanName);
-		boolean code =this.updateById(productEntity);
-		return code;
-	}
-	
+    @Override
+    public void changeStatusToAdded() {
+        baseMapper.changeStatusToAdded();
+    }
 
-	/**发布产品 */
-	@Override
-	public void releaseProduct(Map<String, Object> params) {
-		baseMapper.releaseProduct(params);
-	}
-	
-	/**购卡列表*/
+    @Override
+    public void changeStatusToDismounted() {
+        baseMapper.changeStatusToDismounted();
+    }
+
+    /**
+     * 筛选器
+     */
+    @Override
+    public PageUtils querySelectPage(String check, Map<String, Object> params, String username) {
+        String productId = (String) params.get("productId");
+        String productName = (String) params.get("productName");
+        String startDate = (String) params.get("startDate");
+        String endDate = (String) params.get("endDate");
+        String owner = (String) params.get("owner");
+        String status = (String) params.get("status");
+        Page<ProductEntity> page = null;
+        EntityWrapper<ProductEntity> ew = new EntityWrapper<ProductEntity>();
+        if ("".equals(productId) && "".equals(productName) && "".equals(startDate) && "".equals(endDate) && "".equals(owner) && ("".equals(status))) {
+            if ("productCheck".equals(check)) {
+                ew.andNew().where("1=1", 1).eq("product_check", 1);
+            } else if ("releaseCheck".equals(check)) {
+                ew.andNew().where("1=1", 1).eq("release_check", 1);
+            } else {
+                ew.andNew().where("1=1 and is_delete = 0").eq("create_user", username).or().eq("status", "added");
+            }
+            page = this.selectPage(new Query<ProductEntity>(params).getPage(), ew);
+            return new PageUtils(page);
+        } else {
+            if ("productCheck".equals(check)) {
+                ew.andNew().where("1 =1 ").eq("product_check", 1).like("product_id", productId).like("product_name", productName).like("owner", owner);
+            } else if ("releaseCheck".equals(check)) {
+                ew.andNew().where("1 =1 ").eq("release_check", 1).like("product_id", productId).like("product_name", productName).like("owner", owner);
+            } else {
+                ew.andNew().where("is_delete = 0 and  (create_user='" + username + "' or status='added' )").like("product_id", productId).like("product_name", productName).like("owner", owner).like("status", status);
+                if (!"".equals(status)) {
+                    ew.eq("status", status);
+                }
+            }
+            if (!"".equals(startDate)) {
+                ew.ge("added_date", startDate);
+            }
+            if (!"".equals(endDate)) {
+                ew.le("dismounted_date", endDate);
+            }
+            page = this.selectPage(new Query<ProductEntity>(params).getPage(), ew);
+            return new PageUtils(page);
+        }
+    }
+
+    /**
+     * 查询单个产品
+     */
+    @Override
+    public ProductEntity selectOneProduct(int id) {
+
+        ProductEntity productEntity = this.selectById(id);
+        return productEntity;
+    }
+
+    /**
+     * 删除产品
+     */
+    @Override
+    public boolean deleteProductById(int id) {
+        boolean code = baseMapper.deleteProductById(id);
+        return code;
+    }
+
+    /**
+     * 新增产品
+     */
+    @Override
+    public boolean saveProduct(ProductEntity productEntity) {
+        Date createDate = new Date(System.currentTimeMillis());
+        productEntity.setCreateDate(createDate);
+        String today = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+        String productId = "CP" + today;
+        int data = Integer.parseInt(productEntity.getData().toString());
+        String Unit = "M";
+        if ((data >= 1024)) {
+            data = data / 1024;
+            Unit = "G";
+        }
+        String ratePlanName = productEntity.getOwner() + "_" + productEntity.getSharingMode() + "_" + data + Unit;
+        productEntity.setRatePlanName(ratePlanName);
+        productEntity.setProductId(productId);
+        boolean code = this.insert(productEntity);
+        return code;
+    }
+
+    /**
+     * 修改产品
+     */
+    @Override
+    public boolean updateProduct(ProductEntity productEntity) {
+        productEntity.setStatus("design");
+        productEntity.setProductCheck(0);
+        productEntity.setReleaseCheck(0);
+        int data = Integer.parseInt(productEntity.getData().toString());
+        String Unit = "M";
+        if ((data >= 1024)) {
+            data = data / 1024;
+            Unit = "G";
+        }
+
+        String ratePlanName = productEntity.getOwner() + "_" + productEntity.getSharingMode() + "_" + data + Unit;
+        productEntity.setRatePlanName(ratePlanName);
+        boolean code = this.updateById(productEntity);
+        return code;
+    }
+
+
+    /**
+     * 发布产品
+     */
+    @Override
+    public void releaseProduct(Map<String, Object> params) {
+        baseMapper.releaseProduct(params);
+    }
+
+    /**
+     * 购卡列表
+     */
 //	@Override
 //	public PageUtils queryPageSelling(Map<String, Object> params,String username,String roleType,List<SysUserEntity> userList) {
 //		String todayDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
@@ -215,48 +233,44 @@ public class ProductServiceImpl extends ServiceImpl<ProductDao, ProductEntity> i
 //		page = this.selectPage(new Query<ProductEntity>(params).getPage(), ew);
 //		return new PageUtils(page);
 //	}
-	
+    @Override
+    public void dismountedProduct(Map<String, Object> params) {
+        baseMapper.dismountedProduct(params);
+    }
 
-	
+    @Override
+    public ProductEntity getProductEntity(String productId) {
 
-	@Override
-	public void dismountedProduct(Map<String, Object> params) {
-		baseMapper.dismountedProduct(params);
-	}
+        return baseMapper.getProductEntity(productId);
+    }
 
-	@Override
-	public ProductEntity getProductEntity(String productId) {
-		
-		return baseMapper.getProductEntity(productId);
-	}
+    @Override
+    public void checkProduct(Map<String, Object> params) {
+        baseMapper.checkProduct(params);
+    }
 
-	@Override
-	public void checkProduct(Map<String, Object> params) {
-		baseMapper.checkProduct(params);
-	}
+    @Override
+    public boolean productCheckDelete(@Param("id") int id) {
+        boolean code = baseMapper.productCheckDelete(id);
+        return code;
+    }
 
-	@Override
-	public boolean productCheckDelete(@Param("id")  int id) {
-		boolean code = baseMapper.productCheckDelete(id);
-		return code;
-	}
+    @Override
+    public boolean releaseCheckDelete(@Param("id") int id) {
+        boolean code = baseMapper.releaseCheckDelete(id);
+        return code;
+    }
 
-	@Override
-	public boolean releaseCheckDelete(@Param("id")  int id) {
-		boolean code = baseMapper.releaseCheckDelete(id);
-		return code;
-	}
+    @Override
+    public boolean submitCheck(@Param("id") int id) {
+        boolean flag = baseMapper.submitCheck(id);
+        return flag;
+    }
 
-	@Override
-	public boolean submitCheck(@Param("id")  int id) {
-		boolean flag= baseMapper.submitCheck(id);
-		return flag;
-	}
 
-	
-	/**
-	 * 激活期限到期时候激活可测试卡
-	 * */
+    /**
+     * 激活期限到期时候激活可测试卡
+     * */
 //	@Override
 //	public Map<String,Object> activateCard() {
 //		Map<String,Object> result = new HashMap<>();

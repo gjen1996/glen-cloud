@@ -3,11 +3,11 @@
 <mapper namespace="com.glen.appcustomerlogin.dao.SysUserDao">
     <select id="findByUsername"
             resultType="com.glen.appcustomerlogin.entity.SysUserEntity">
-		SELECT
-		    *
-		FROM
-			sys_user
-		WHERE
-			username = #{username}
-	</select>
+        SELECT
+        *
+        FROM
+        sys_user
+        WHERE
+        username = #{username}
+    </select>
 </mapper>

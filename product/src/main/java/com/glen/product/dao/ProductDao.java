@@ -33,23 +33,23 @@ public interface ProductDao extends BaseMapper<ProductEntity> {
     boolean releaseCheckDelete(@Param("id") int id);
 
     boolean submitCheck(@Param("id") int id);
-    
+
     /**
-	 * 通过iccid获取产品
-	 * */
+     * 通过iccid获取产品
+     */
 
-	ProductEntity getProductInfoByIccid(String iccid);
+    ProductEntity getProductInfoByIccid(String iccid);
 
-	
-	/**
-	 * 激活产品Id对应的可测试卡
-	 * */
-	boolean activateCardByProductId(String pruductId);
 
-	/**
-	 * 根据产品ID跟状态获取要变更的卡列表
-	 * @author chenz76
-	 * */
-	//public List<StoreTerminnalDetail> getTerminalByProductIdAndStatus(@Param("productId") String productId);
-    
+    /**
+     * 激活产品Id对应的可测试卡
+     */
+    boolean activateCardByProductId(String pruductId);
+
+    /**
+     * 根据产品ID跟状态获取要变更的卡列表
+     * @author chenz76
+     * */
+    //public List<StoreTerminnalDetail> getTerminalByProductIdAndStatus(@Param("productId") String productId);
+
 }

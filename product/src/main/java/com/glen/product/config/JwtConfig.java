@@ -42,6 +42,7 @@ import java.util.concurrent.TimeUnit;
 @EnableAuthorizationServer
 public class JwtConfig {
     public static final String public_cert = "public.cert";
+
     @Bean
     @Qualifier("tokenStore")
     public TokenStore tokenStore() {
@@ -49,22 +50,22 @@ public class JwtConfig {
     }
 
     @Bean
-    protected JwtAccessTokenConverter jwtTokenEnhancer()  {
+    protected JwtAccessTokenConverter jwtTokenEnhancer() {
 //        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
 //          converter.setVerifierKey(publicKey);
 //        converter.setSigningKey("123");
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        Resource resource =  new ClassPathResource(public_cert);
+        Resource resource = new ClassPathResource(public_cert);
 
         String publicKey;
         try {
             publicKey = new String(FileCopyUtils.copyToByteArray(resource.getInputStream()));
-        }catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         converter.setVerifierKey(publicKey);
-        log.info("public key:"+converter);
+        log.info("public key:" + converter);
         return converter;
     }
 }

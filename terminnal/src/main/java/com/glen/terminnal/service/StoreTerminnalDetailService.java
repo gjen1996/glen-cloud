@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author wemoucy
@@ -16,11 +16,12 @@ import java.util.Map;
  */
 public interface StoreTerminnalDetailService extends IService<StoreTerminnalDetailEntity> {
 
-	/**
-	 * 根据iccid返回StoreTerminaldetail
-	 * @author chenkb3
-	 * @param iccid
-	 * @return
-	 */
-	StoreTerminnalDetailEntity getStoreTerminalByIccid(String iccid);
+    /**
+     * 根据iccid返回StoreTerminaldetail
+     *
+     * @param iccid
+     * @return
+     * @author chenkb3
+     */
+    StoreTerminnalDetailEntity getStoreTerminalByIccid(String iccid);
 }

@@ -14,17 +14,18 @@ import java.util.Date;
 
 /**
  * @author Glen
- * @create 2019/6/24 17:04 
+ * @create 2019/6/24 17:04
  * @Description
  */
-@FeignClient(value="billing", fallback = MonthsPrepayCardServiceImplFallback.class)
+@FeignClient(value = "billing", fallback = MonthsPrepayCardServiceImplFallback.class)
 public interface MonthsPrepayCardService {
     /**
      * 获取变更时间
-     * @author chenkb3
+     *
      * @param data
-     * @return    data 里面是iccid
+     * @return data 里面是iccid
+     * @author chenkb3
      */
     @RequestMapping("/billing/changePlanTime")
-     String changePlanTime(@RequestBody JSONObject data);
+    String changePlanTime(@RequestBody JSONObject data);
 }
