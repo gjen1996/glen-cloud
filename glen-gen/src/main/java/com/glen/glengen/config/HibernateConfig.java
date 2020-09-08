@@ -1,17 +1,15 @@
 package com.glen.glengen.config;
 
 
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -22,46 +20,67 @@ import java.util.Properties;
  * @description HibernateP配置
  */
 @Configuration
-@EnableTransactionManagement
-@ComponentScan({ "com.glen" })
-@PropertySource(value = { "classpath:bootstrap.yml" })
+@Slf4j
 public class HibernateConfig {
-
     @Autowired
     private Environment environment;
+    @Autowired
+    private DataSource dataSource;
     //session factory
     @Bean
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan(new String[] { "com.glen.entity" });
+        log.info("data:"+dataSource());
+        sessionFactory.setDataSource(dataSource);
+        sessionFactory.setPackagesToScan("com.glen");
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
     }
     // 数据源配置
     @Bean
-    public DataSource dataSource() {
+    public  DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(environment.getRequiredProperty("spring.datasource.driver-class-name"));
-        dataSource.setUrl(environment.getRequiredProperty("spring.datasource.url"));
-        dataSource.setUsername(environment.getRequiredProperty("spring.datasource..username"));
-        dataSource.setPassword(environment.getRequiredProperty("spring.datasource..password"));
+        dataSource.setDriverClassName(environment.getRequiredProperty("spring.datasource.druid.driver-class-name"));
+        dataSource.setUrl(environment.getRequiredProperty("spring.datasource.druid.url"));
+        dataSource.setUsername(environment.getRequiredProperty("spring.datasource.druid.username"));
+        dataSource.setPassword(environment.getRequiredProperty("spring.datasource.druid.password"));
         return dataSource;
     }
     //获取hibernate配置
-    private Properties hibernateProperties() {
+    private  Properties hibernateProperties() {
         Properties properties = new Properties();
-        properties.put("hibernate.dialect", environment.getRequiredProperty("spring.jpa.hibernate.dialect"));
-        properties.put("hibernate.show_sql", environment.getRequiredProperty("spring.jpa.hibernate.show-sql"));
-        properties.put("hibernate.format_sql", environment.getRequiredProperty("spring.jpa.hibernate.format_sql"));
+        properties.setProperty("hibernate.current_session_context_class", environment.getProperty("spring.jpa.properties.hibernate.current_session_context_class"));
+        properties.setProperty("hibernate.hbm2ddl.auto", environment.getProperty("spring.jpa.hibernate.ddl-auto"));
+        properties.setProperty("hibernate.show-sql", environment.getProperty("spring.jpa.properties.hibernate.show-sql"));
+        properties.setProperty("hibernate.cache.use_second_level_cache", environment.getProperty("spring.jpa.properties.hibernate.cache.use_second_level_cache"));
+        properties.setProperty("hibernate.cache.use_query_cache", environment.getProperty("spring.jpa.properties.hibernate.cache.use_query_cache"));
         return properties;
     }
-    // 事务管理
-    @Bean
-    @Autowired
-    public HibernateTransactionManager transactionManager(SessionFactory sf) {
-        HibernateTransactionManager txManager = new HibernateTransactionManager();
-        txManager.setSessionFactory(sf);
-        return txManager;
-    }
+//    // 事务管理
+//    @Bean
+//    @Autowired
+//    public HibernateTransactionManager transactionManager(SessionFactory sf) {
+//        HibernateTransactionManager txManager = new HibernateTransactionManager();
+//        txManager.setSessionFactory(sf);
+//        return txManager;
+//    }
+
+//
+//    public  Session currentSession() throws HibernateException {
+//        Session s = (Session)session.get();
+//        //Open a new Session,if this Thread has none yet
+//        if(s == null || !s.isOpen()) {
+//            s = this.sessionFactory().oopenSession();
+//            session.set(s);
+//        }
+//        return s;
+//    }
+//
+//    public  void closeSession() throws HibernateException {
+//        Session s = (Session)session.get();
+//        session.set(null);
+//        if(s != null) {
+//            s.close();
+//        }
+//    }
 }
