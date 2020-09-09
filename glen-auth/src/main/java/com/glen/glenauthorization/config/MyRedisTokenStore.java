@@ -1,4 +1,4 @@
-package com.glen.authorizationserver.config;/**
+package com.glen.glenauthorization.config;/**
  * @author Glen
  * @create 2019- 07-2019/7/24-16:38
  * @Description

@@ -1,10 +1,10 @@
-package com.glen.authorizationserver.service;/**
+package com.glen.glenauthorization.service;/**
  * @author Glen
  * @create 2019- 06-2019/6/28-10:32
  * @Description
  */
 
-import com.glen.authorizationserver.entity.User;
+import com.glen.glenauthorization.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

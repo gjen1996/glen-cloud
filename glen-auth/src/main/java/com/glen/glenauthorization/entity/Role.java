@@ -1,4 +1,4 @@
-package com.glen.authorizationserver.entity;/**
+package com.glen.glenauthorization.entity;/**
  * @author Glen
  * @create 2019- 06-2019/6/28-10:35
  * @Description

@@ -1,4 +1,4 @@
-package com.glen.authorizationserver.entity;
+package com.glen.glenauthorization.entity;
 
 
 import org.springframework.security.core.GrantedAuthority;

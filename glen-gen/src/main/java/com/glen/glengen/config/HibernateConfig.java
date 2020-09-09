@@ -4,6 +4,7 @@ package com.glen.glengen.config;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,7 @@ import java.util.Properties;
  */
 @Configuration
 @Slf4j
+@PropertySource(value = { "classpath:bootstrap.yml" })
 public class HibernateConfig {
     @Autowired
     private Environment environment;
@@ -31,7 +33,7 @@ public class HibernateConfig {
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         log.info("data:"+dataSource());
-        sessionFactory.setDataSource(dataSource);
+        sessionFactory.setDataSource(dataSource());
         sessionFactory.setPackagesToScan("com.glen");
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;

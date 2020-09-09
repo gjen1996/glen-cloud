@@ -1,4 +1,4 @@
-package com.glen.authorizationserver.service;
+package com.glen.glenauthorization.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

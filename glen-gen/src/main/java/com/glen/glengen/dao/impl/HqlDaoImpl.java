@@ -113,6 +113,7 @@ public class HqlDaoImpl implements HqlDao {
     public <T> T findById(Class entityClass, String id){
         log.info("jjinru这里");
         T t = null;
+        log.info("getSession():"+getSession());
         try {
             t = (T) getCurrentSession().get(entityClass, id);
             log.info("t:"+t);
