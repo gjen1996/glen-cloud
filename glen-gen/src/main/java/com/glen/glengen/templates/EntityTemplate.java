@@ -37,7 +37,11 @@ public class EntityTemplate {
                 "import lombok.Data;\n" +
                 "\n" +
                 "import javax.persistence.*;\n" +
-                "import java.util.Date;");
+                "import java.util.Date;\n\n\n\n");
+        content.append("@Data\n" +
+                "@Entity\n" +
+                "@Table(name=\"+table+\")");
+
         log.info("content:---" + content.toString());
         try {
 

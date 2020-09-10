@@ -4,7 +4,11 @@ package com.glen.glengen.util;/**
  * @Description
  */
 
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
+
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * @author Glen
@@ -20,29 +24,78 @@ public class FileOperationUtil {
      */
     public static String packageNmae(String packageName) {
         int i;
-        int n = packageName.toCharArray().length;
-        for (i = 0; i < n; i++) {
+        int str = packageName.toCharArray().length;
+        for (i = 0; i < str; i++) {
             if ((int) '.' == packageName.toCharArray()[i]) {
                 if (i == packageName.length() - 1) {
                     packageName = packageName.substring(0, packageName.length() - 1);
                 }
             }
         }
-        return packageName.replace(".","/");
+        return packageName.replace(".", "/");
     }
+
     /**
-      * @author Glen
-      * @date 2020/9/10 16:11
-      * @Description 类名处理
-      */
+     * @author Glen
+     * @date 2020/9/10 16:11
+     * @Description 类名处理
+     */
     public static String className(String className) {
-        char[] n = className.toCharArray();
-        if (n[0] >= 'A' && n[0] <= 'Z'){
+        char[] str = className.toCharArray();
+        if (str[0] >= 'A' && str[0] <= 'Z') {
             className = className + ".java";
-        }else {
-            className = String.valueOf(n[0]).toUpperCase()+className.substring(1,className.length())+".java";
+        } else {
+            className = String.valueOf(str[0]).toUpperCase() + className.substring(1, className.length()) + ".java";
         }
-        log.info("className:"+className);
+        log.info("className:" + className);
         return className;
+    }
+
+    // 格式化数据库表名 sMdft
+    public static String tableName(String tableName) {
+        char[] str = tableName.toCharArray();
+        int length = str.length;
+        char line = '_';
+        if (str[0] >= 'a' && str[0] <= 'z') {
+            int i;
+            for (i = 1; i < length; i++) {
+                if (str[i] >= 'A' && str[i] <= 'Z') {
+                    String head = tableName.substring(0, i) + "_";
+                    tableName = head + tableName.replace(str[i], Character.toLowerCase(str[i])).substring(i, length);
+                }
+            }
+        } else {
+            int num;
+            String head = tableName;
+            int i = 0;
+            for (num = 1; num < length; num++) {
+                if (str[num] >= 'A' && str[num] <= 'Z') {
+                    if(num ==1){
+
+                    }
+                    log.info("num" + num);
+                    String body = tableName.replace(str[num], Character.toLowerCase(str[num]));
+                    log.info("body:" + body);
+                    StringBuffer sb = new StringBuffer(body);
+                    log.info("sb:" + sb);
+                    log.info("i:" + i);
+                    sb.insert(num + i, "_");
+                    tableName = sb.toString();
+                    i++;
+                    log.info("tableName:" + tableName);
+                }
+            }
+            StringBuffer sbStr = new StringBuffer(tableName.replace(str[0], Character.toLowerCase(str[0])));
+            sbStr.insert(1,"_");
+            if(sbStr.indexOf("__")!=-1){
+            }
+            tableName =sbStr.toString();
+        }
+        log.info("tableName:" + tableName);
+        return tableName;
+    }
+
+    public static void main(String[] args) {
+        tableName("TTtableNNameBtuB");
     }
 }
