@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.glen.glencommonsystem.util.R;
 
 
-public interface MappingDao{
+public interface CreateTemplateDao {
     R createTable(JSONObject r);
-
 }

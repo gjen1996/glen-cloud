@@ -8,26 +8,26 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 
 /**
  * 系统用户
  */
-@Data
+
 @ApiModel(value = "User对象", description = "用户表")
-@Table(name="user")
-@MappedSuperclass
+@Data
+@Entity
+@Table(name="s_user")
 public class SysUserEntity {
     private static final long serialVersionUID = 1L;
 
     /**
      * 用户ID
      */
+
     @ApiModelProperty(value = "主键id", example = "1")
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -78,7 +78,7 @@ public class SysUserEntity {
      * 角色ID列表
      */
     @ApiModelProperty(value = "用户角色", example = "1")
-    private List<Long> roleIdList;
+    private Integer roleId;
 
     /**
      * 创建时间

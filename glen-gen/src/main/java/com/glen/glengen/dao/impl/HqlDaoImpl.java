@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManagerFactory;
@@ -46,7 +47,21 @@ public class HqlDaoImpl implements HqlDao {
     public Session getCurrentSession() {
         return entityManagerFactory.unwrap(SessionFactory.class).getCurrentSession();
     }
-
+    @Override
+    public <T> T findById(Class entityClass, String id){
+        log.info("jjinru这里");
+        T t = null;
+        log.info("getSession():"+getSession());
+        try {
+            t = (T) getCurrentSession().get(entityClass, id);
+            log.info("t:"+t);
+        } catch (org.hibernate.ObjectNotFoundException e) {
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return t;
+    }
     @Override
     public Serializable save(TEntity entity){
         Serializable s = null;
@@ -109,21 +124,21 @@ public class HqlDaoImpl implements HqlDao {
         }
     }
 
-    @Override
-    public <T> T findById(Class entityClass, String id){
-        log.info("jjinru这里");
-        T t = null;
-        log.info("getSession():"+getSession());
-        try {
-            t = (T) getCurrentSession().get(entityClass, id);
-            log.info("t:"+t);
-        } catch (org.hibernate.ObjectNotFoundException e) {
-            return null;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return t;
-    }
+//    @Override
+//    public <T> T findById(Class entityClass, String id){
+//        log.info("jjinru这里");
+//        T t = null;
+//        log.info("getSession():"+getSession());
+//        try {
+//            t = (T) getCurrentSession().get(entityClass, id);
+//            log.info("t:"+t);
+//        } catch (org.hibernate.ObjectNotFoundException e) {
+//            return null;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return t;
+//    }
 
     @Override
     public void update(TEntity entity) {

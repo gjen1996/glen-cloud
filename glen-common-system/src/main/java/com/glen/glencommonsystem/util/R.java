@@ -11,7 +11,7 @@ public class R extends JSONObject {
 	private static final long serialVersionUID = 1L;
 
 	public R() {
-		put("code", 0);
+		put("code", 200);
 		put("msg", "success");
 	}
 

@@ -8,6 +8,6 @@ import com.glen.glencommonsystem.util.R;
  * @date 2020/9/8 16:24
  * @description 该类的作用
  */
-public interface MappingService {
+public interface CreateTemplateService {
     R createTable(JSONObject param);
 }
