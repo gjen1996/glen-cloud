@@ -5,6 +5,7 @@ package com.glen.glengen.templates;/**
  */
 
 import com.alibaba.fastjson.JSONObject;
+import com.glen.glencommonsystem.util.DateUtils;
 import com.glen.glencommonsystem.util.R;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +26,11 @@ public class EntityTemplate {
         FileOutputStream fop = null;
         File file;
         StringBuffer content = new StringBuffer("package " + params.getString("packageName") + "\n");
-        content.append("\n");
+        content.append("/**\n" +
+                " * @author" +params.getString("author")+"\n"+
+                " * @create " + DateUtils.currentTime()+"\n"+
+                " * @Description" + params.getString("Description") + "\n"+
+                " */");
         content.append("import com.fasterxml.jackson.annotation.JsonFormat;\n" +
                 "import io.swagger.annotations.ApiModel;\n" +
                 "import io.swagger.annotations.ApiModelProperty;\n" +
@@ -49,7 +54,6 @@ public class EntityTemplate {
             fop.flush();
             fop.close();
 
-            System.out.println("Done");
 
         } catch (IOException e) {
             e.printStackTrace();
