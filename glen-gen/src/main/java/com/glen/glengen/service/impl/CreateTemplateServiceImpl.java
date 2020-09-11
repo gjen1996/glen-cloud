@@ -38,7 +38,7 @@ public class CreateTemplateServiceImpl implements CreateTemplateService {
         String className = FileOperationUtil.className(param.getString("className"));
         mkdirDirOperService.CreateFile(fileUrl.toString(),className);
         param.put("fileUrl",fileUrl);
-        param.put("className",className);
+        param.put("className",param.getString("className"));
         EntityTemplate.EntityTemplateWriteFile(param);
        // createTemplateDao.createTable(param);
         return R.ok();

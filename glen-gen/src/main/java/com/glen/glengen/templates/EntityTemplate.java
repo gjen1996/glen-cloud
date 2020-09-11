@@ -7,6 +7,7 @@ package com.glen.glengen.templates;/**
 import com.alibaba.fastjson.JSONObject;
 import com.glen.glencommonsystem.util.DateUtils;
 import com.glen.glencommonsystem.util.R;
+import com.glen.glengen.util.FileOperationUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -40,7 +41,7 @@ public class EntityTemplate {
                 "import java.util.Date;\n\n\n\n");
         content.append("@Data\n" +
                 "@Entity\n" +
-                "@Table(name=\"+table+\")");
+                    "@Table(name=\"" + FileOperationUtil.tableName(params.getString("className")) + "\")");
 
         log.info("content:---" + content.toString());
         try {

@@ -3,12 +3,8 @@ package com.glen.glengen.util;/**
  * @create 2020- 09-2020/9/10-15:35
  * @Description
  */
-
-import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * @author Glen
@@ -58,10 +54,14 @@ public class FileOperationUtil {
         char line = '_';
         if (str[0] >= 'a' && str[0] <= 'z') {
             int i;
+            int a = 0;
             for (i = 1; i < length; i++) {
                 if (str[i] >= 'A' && str[i] <= 'Z') {
-                    String head = tableName.substring(0, i) + "_";
-                    tableName = head + tableName.replace(str[i], Character.toLowerCase(str[i])).substring(i, length);
+                    String body = tableName.replace(str[i], Character.toLowerCase(str[i]));
+                    StringBuffer sb = new StringBuffer(body);
+                    sb.insert(i + a, "_");
+                    tableName = sb.toString();
+                    a++;
                 }
             }
         } else {
@@ -70,32 +70,15 @@ public class FileOperationUtil {
             int i = 0;
             for (num = 1; num < length; num++) {
                 if (str[num] >= 'A' && str[num] <= 'Z') {
-                    if(num ==1){
-
-                    }
-                    log.info("num" + num);
                     String body = tableName.replace(str[num], Character.toLowerCase(str[num]));
-                    log.info("body:" + body);
                     StringBuffer sb = new StringBuffer(body);
-                    log.info("sb:" + sb);
-                    log.info("i:" + i);
                     sb.insert(num + i, "_");
                     tableName = sb.toString();
                     i++;
-                    log.info("tableName:" + tableName);
                 }
             }
-            StringBuffer sbStr = new StringBuffer(tableName.replace(str[0], Character.toLowerCase(str[0])));
-            sbStr.insert(1,"_");
-            if(sbStr.indexOf("__")!=-1){
-            }
-            tableName =sbStr.toString();
+            tableName = tableName.replace(str[0], Character.toLowerCase(str[0]));
         }
-        log.info("tableName:" + tableName);
         return tableName;
-    }
-
-    public static void main(String[] args) {
-        tableName("TTtableNNameBtuB");
     }
 }
