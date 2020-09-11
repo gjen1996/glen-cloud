@@ -36,14 +36,16 @@ public class FileOperationUtil {
      * @date 2020/9/10 16:11
      * @Description 类名处理
      */
-    public static String className(String className) {
+    public static String className(String className,Boolean bo) {
         char[] str = className.toCharArray();
         if (str[0] >= 'A' && str[0] <= 'Z') {
             className = className + ".java";
         } else {
             className = String.valueOf(str[0]).toUpperCase() + className.substring(1, className.length()) + ".java";
         }
-        log.info("className:" + className);
+        if(bo == true){
+            className =className.substring(0,className.length()-5);
+        }
         return className;
     }
 
@@ -81,4 +83,9 @@ public class FileOperationUtil {
         }
         return tableName;
     }
+    public static void main(String[] args){
+        log.info(className("Systemctl",true));
+        log.info(className("Systemctl",false));
+    }
+
 }

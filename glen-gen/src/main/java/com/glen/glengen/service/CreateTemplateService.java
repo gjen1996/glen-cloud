@@ -9,5 +9,5 @@ import com.glen.glencommonsystem.util.R;
  * @description 该类的作用
  */
 public interface CreateTemplateService {
-    R createTable(JSONObject param);
+    R createTable(JSONObject param) throws IllegalAccessException, InstantiationException, ClassNotFoundException;
 }

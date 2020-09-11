@@ -4,15 +4,21 @@ package com.glen.glengen.templates;/**
  * @Description
  */
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.glen.glencommonsystem.util.DateUtils;
 import com.glen.glencommonsystem.util.R;
+import com.glen.glengen.util.ContentOperationUtil;
 import com.glen.glengen.util.FileOperationUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * @author Glen
@@ -24,53 +30,44 @@ public class EntityTemplate {
 
     public static R EntityTemplateWriteFile(JSONObject params) {
         log.info("EntityTemplateWriteFile---params" + "---" + params);
-        FileOutputStream fop = null;
-        File file;
-        StringBuffer content = new StringBuffer("package " + params.getString("packageName") + "\n");
+
+        StringBuffer content = new StringBuffer("package " + params.getString("packageName") +";"+"\n");
         content.append("/**\n" +
-                " * @author" +params.getString("author")+"\n"+
-                " * @create " + DateUtils.currentTime()+"\n"+
-                " * @Description" + params.getString("Description") + "\n"+
-                " */");
+                " * @author " + params.getString("author") + "\n" +
+                " * @create " + DateUtils.currentTime() + "\n" +
+                " * @Description " + params.getString("Description") + "\n" +
+                " */\n\n");
         content.append("import com.fasterxml.jackson.annotation.JsonFormat;\n" +
                 "import io.swagger.annotations.ApiModel;\n" +
                 "import io.swagger.annotations.ApiModelProperty;\n" +
                 "import lombok.Data;\n" +
                 "\n" +
                 "import javax.persistence.*;\n" +
-                "import java.util.Date;\n\n\n\n");
+                "import java.util.Date;\n\n");
         content.append("@Data\n" +
                 "@Entity\n" +
-                    "@Table(name=\"" + FileOperationUtil.tableName(params.getString("className")) + "\")");
-
-        log.info("content:---" + content.toString());
-        try {
-
-            file = new File(params.getString("fileUrl"), params.getString("className"));
-            fop = new FileOutputStream(file);
-            // if file doesnt exists, then create it
-            if (!file.exists()) {
-                file.createNewFile();
+                "@Table(name= \"" + FileOperationUtil.tableName(params.getString("className")) + "\")\n");
+        content.append("public class " + FileOperationUtil.className(params.getString("className"), true) + "{\n");
+        //循环输出变量
+        log.info("params" + params.getString("vars"));
+        JSONArray array = params.getJSONArray("vars");
+        log.info("array:" + array);
+        for (int i = 0; i < array.size(); i++) {
+            JSONObject jo = array.getJSONObject(i);
+            content.append("    /**\n" +
+                    "     * " + jo.getString("note") + "\n" +
+                    "     */\n");
+            if ("1".equals(jo.getString("isPrimaryKey"))) {
+                content.append("    @Id\n" + "    @GeneratedValue(strategy= GenerationType.AUTO)\n");
             }
-            // get the content in bytes
-            byte[] contentInBytes = content.toString().getBytes();
-
-            fop.write(contentInBytes);
-            fop.flush();
-            fop.close();
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (fop != null) {
-                    fop.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            if("Date".equals(jo.getString("varTpye"))){
+                content.append("    @JsonFormat(pattern = \"" + jo.getString("pattern")+ "\")\n");
             }
+            content.append("    private " + jo.getString("varTpye") + " " + jo.getString("varName") + ";\n\n");
         }
-        return R.ok();
+        content.append("}");
+        log.info("content:---" + content.toString());
+        ContentOperationUtil.contentOperation(params,content);
+        return R.ok().put("msgDetials","文件生成成功！");
     }
 }

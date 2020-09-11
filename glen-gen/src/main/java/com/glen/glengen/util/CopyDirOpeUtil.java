@@ -1,25 +1,22 @@
-package com.glen.glengen.service.impl;/**
+package com.glen.glengen.util;/**
  * @author Glen
- * @create 2020- 09-2020/9/10-14:24
+ * @create 2020- 09-2020/9/11-12:04
  * @Description
  */
 
 import com.glen.glencommonsystem.util.R;
-import com.glen.glengen.service.CopyDirOperService;
-import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 
 /**
  * @author Glen
- * @create 2020/9/10 14:24
- * @Description 复制文件或文件夹
+ * @create 2020/9/11 12:04
+ * @Description
  */
-@Service
-public class CopyDirOperServiceImpl implements CopyDirOperService {
-    // 复制文件
-    @Override
-    public R copyFile(File sourceFile, File targetFile)
+@Slf4j
+public class CopyDirOpeUtil {
+    public static R copyFile(File sourceFile, File targetFile)
             throws IOException {
         // 新建文件输入流并对它进行缓冲
         FileInputStream input = new FileInputStream(sourceFile);
@@ -42,12 +39,11 @@ public class CopyDirOperServiceImpl implements CopyDirOperService {
         outBuff.close();
         output.close();
         input.close();
-        return R.ok().put("msgDetils","文件复制成功");
+        return R.ok().put("msgDetils", "文件复制成功");
     }
 
     // 复制文件夹
-    @Override
-    public R copyDirectiory(String sourceDir, String targetDir)
+    public static R copyDirectiory(String sourceDir, String targetDir)
             throws IOException {
         // 新建目标目录
         (new File(targetDir)).mkdirs();
@@ -71,6 +67,34 @@ public class CopyDirOperServiceImpl implements CopyDirOperService {
                 copyDirectiory(dir1, dir2);
             }
         }
-        return R.ok().put("msgDetils","文件夹复制成功");
+        return R.ok().put("msgDetils", "文件夹复制成功");
+    }
+
+    //移动文件
+    public static R moveFile(String startPath, String endPath, String fileName) {
+        log.info(startPath);
+        log.info(endPath);
+        log.info(fileName);
+        try {
+            File startFile = new File(startPath + "/"+fileName);
+            File tempPath = new File(endPath);
+            //获取文件夹路径
+            File endFile = new File(endPath+fileName);
+            //判断文件夹是否创建，没有创建则创建新文件夹
+            if (!tempPath.exists()) {
+                tempPath.mkdirs();
+            }
+            if (startFile.renameTo(endFile)) {
+                System.out.println("File is moved successful!");
+                log.info("文件移动成功！文件名：《{}》 目标路径：{}", fileName, endPath);
+            } else {
+                System.out.println("File is failed to move!");
+                log.info("文件移动失败！文件名：《{}》 起始路径：{}", fileName, startPath);
+            }
+        } catch (Exception e) {
+            log.info("文件移动异常！文件名：《{}》 起始路径：{}", fileName, startPath);
+
+        }
+        return R.ok();
     }
 }

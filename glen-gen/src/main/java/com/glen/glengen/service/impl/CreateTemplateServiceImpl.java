@@ -4,9 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.glen.glencommonsystem.util.R;
 import com.glen.glengen.dao.CreateTemplateDao;
 import com.glen.glengen.service.CreateTemplateService;
-import com.glen.glengen.service.MkdirDirOperService;
 import com.glen.glengen.templates.EntityTemplate;
+import com.glen.glengen.util.CopyDirOpeUtil;
 import com.glen.glengen.util.FileOperationUtil;
+import com.glen.glengen.util.MkdirDirOpeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,23 +25,23 @@ import javax.transaction.Transactional;
 public class CreateTemplateServiceImpl implements CreateTemplateService {
     @Autowired
     private CreateTemplateDao createTemplateDao;
-    @Autowired
-    private MkdirDirOperService mkdirDirOperService;
 
     @Override
-    public R createTable(JSONObject param) {
+    public R createTable(JSONObject param) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
         String packageName = FileOperationUtil.packageNmae(param.getString("packageName"));
         log.info("packageName:"+packageName);
         StringBuffer fileUrl = new StringBuffer("C:/Users/80559/Desktop/");
         fileUrl.append(packageName);
         log.info("fileUrl:"+fileUrl);
         //创建文件
-        String className = FileOperationUtil.className(param.getString("className"));
-        mkdirDirOperService.CreateFile(fileUrl.toString(),className);
-        param.put("fileUrl",fileUrl);
-        param.put("className",param.getString("className"));
+        String classFileName = FileOperationUtil.className(param.getString("className"),false);
+        MkdirDirOpeUtil.createFile(fileUrl.toString(),classFileName);
+        param.put("fileUrl",fileUrl.toString());
+        param.put("classNameStand",FileOperationUtil.className(param.getString("className"),true));
+        param.put("classFileName",classFileName);
         EntityTemplate.EntityTemplateWriteFile(param);
-       // createTemplateDao.createTable(param);
+        CopyDirOpeUtil.moveFile(fileUrl.toString(),param.getString("endPath"),classFileName);
+        createTemplateDao.createTables(param);
         return R.ok();
     }
 }

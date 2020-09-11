@@ -18,7 +18,7 @@ import java.io.Serializable;
 
 @Slf4j
 @Service
-public class CreateTemplateDaoImpl extends HibernateBaseDao implements CreateTemplateDao {
+public class CreateTemplateDaoImpl extends Object implements CreateTemplateDao {
 
     @Autowired
     private EntityManagerFactory entityManagerFactory;
@@ -39,8 +39,6 @@ public class CreateTemplateDaoImpl extends HibernateBaseDao implements CreateTem
         sysUserEntity.setId(1);
         log.info("sysUserEntity:" + sysUserEntity);
         Serializable s = null;
-        log.info("这个是session" + getSession());
-        //Session session1 = getSession1();
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         try {
@@ -51,5 +49,28 @@ public class CreateTemplateDaoImpl extends HibernateBaseDao implements CreateTem
         }
         tx.commit();
         return R.ok();
+    }
+    @Override
+    public <T> R createTables(JSONObject r) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        log.info("R:"+r);
+        Class entityClass = (Class) Class.forName("com.glen.glengen.entity."+r.getString("classNameStand"));
+        Object entityTpye = Class.forName("com.glen.glengen.entity."+r.getString("classNameStand")).newInstance();
+        log.info("EntityTpye:"+entityTpye);//SystemUserM(id=null, username=null, password=null, createTime=null)
+        log.info("EntityTpye1:"+entityTpye.getClass());//class com.glen.glengen.entity.SystemUserM
+        log.info("EntityTpye2:"+entityTpye.getClass().getDeclaringClass());//null
+        log.info("EntityTpye3:"+entityTpye.getClass().getComponentType());//null
+        log.info("EntityTpye4:"+entityTpye.getClass().getSuperclass());//class java.lang.Object
+        Serializable s = null;
+        Session session = getCurrentSession();
+        Transaction tx = session.beginTransaction();
+        try {
+            s = session.save(entityTpye);
+            log.info("s:" + s);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        tx.commit();
+       return R.ok();
+
     }
 }
