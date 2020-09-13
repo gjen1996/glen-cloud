@@ -8,11 +8,8 @@ import com.glen.glengen.service.CreateTemplateService;
 import com.glen.glengen.service.ISysUserService;
 import com.glen.glengen.service.impl.SysUserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import com.glen.glengen.dao.CreateTemplateDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 /**
  * @author 盖玉成
@@ -30,9 +27,9 @@ public class CreateTemplateController {
     private  CreateTemplateDao createTemplateDao;
 
     @ResponseBody
-    @RequestMapping(value = "/createTable", method = RequestMethod.POST)
-    public R createDir(@RequestBody JSONObject params) throws IOException, IllegalAccessException, ClassNotFoundException, InstantiationException {
-        return createTemplateServicee.createTable(params);
+    @RequestMapping(value = "/createTables", method = RequestMethod.POST)
+    public R createDir(@RequestBody JSONObject params) throws Exception {
+        return createTemplateServicee.createTables(params);
     }
     @ResponseBody
     @RequestMapping(value = "/user", method = RequestMethod.POST)
@@ -41,10 +38,5 @@ public class CreateTemplateController {
         String id = "1";
         SysUserEntity user = ser.findById(id);
         log.info("user:"+user);
-    }
-    @ResponseBody
-    @RequestMapping(value = "/createTables", method = RequestMethod.POST)
-    public R createTables(@RequestBody JSONObject params) throws IOException, IllegalAccessException, InstantiationException, ClassNotFoundException {
-        return createTemplateDao.createTables(params);
     }
 }

@@ -128,14 +128,6 @@ public class SysUserEntity {
     private String openId;
 
 
-    public String getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(String isDelete) {
-        this.isDelete = isDelete;
-    }
-
     /**
      * 微信登陆态
      */

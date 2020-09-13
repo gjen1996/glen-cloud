@@ -12,14 +12,6 @@ import com.glen.glengen.util.ContentOperationUtil;
 import com.glen.glengen.util.FileOperationUtil;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Date;
-
 /**
  * @author Glen
  * @create 2020/9/10 17:00
@@ -38,8 +30,6 @@ public class EntityTemplate {
                 " * @Description " + params.getString("Description") + "\n" +
                 " */\n\n");
         content.append("import com.fasterxml.jackson.annotation.JsonFormat;\n" +
-                "import io.swagger.annotations.ApiModel;\n" +
-                "import io.swagger.annotations.ApiModelProperty;\n" +
                 "import lombok.Data;\n" +
                 "\n" +
                 "import javax.persistence.*;\n" +
@@ -66,8 +56,7 @@ public class EntityTemplate {
             content.append("    private " + jo.getString("varTpye") + " " + jo.getString("varName") + ";\n\n");
         }
         content.append("}");
-        log.info("content:---" + content.toString());
         ContentOperationUtil.contentOperation(params,content);
-        return R.ok().put("msgDetials","文件生成成功！");
+        return R.ok().put("msgDetials","文件生成成功！").put("SOURCE_CODE",content.toString());
     }
 }

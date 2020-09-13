@@ -4,8 +4,6 @@ package com.glen.glengen.dao.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.glen.glencommonsystem.util.R;
 import com.glen.glengen.dao.CreateTemplateDao;
-import com.glen.glengen.entity.SysUserEntity;
-import com.glen.glengen.util.HibernateBaseDao;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -33,27 +31,9 @@ public class CreateTemplateDaoImpl extends Object implements CreateTemplateDao {
     }
 
     @Override
-    public R createTable(JSONObject r) {
-        log.info("jinrucreateTable");
-        SysUserEntity sysUserEntity = new SysUserEntity();
-        sysUserEntity.setId(1);
-        log.info("sysUserEntity:" + sysUserEntity);
-        Serializable s = null;
-        Session session = getCurrentSession();
-        Transaction tx = session.beginTransaction();
-        try {
-            s = session.save(sysUserEntity);
-            log.info("s:" + s);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        tx.commit();
-        return R.ok();
-    }
-    @Override
     public <T> R createTables(JSONObject r) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         log.info("R:"+r);
-        Class entityClass = (Class) Class.forName("com.glen.glengen.entity."+r.getString("classNameStand"));
+       // Class entityClass = (Class) Class.forName("com.glen.glengen.entity."+r.getString("classNameStand"));
         Object entityTpye = Class.forName("com.glen.glengen.entity."+r.getString("classNameStand")).newInstance();
         log.info("EntityTpye:"+entityTpye);//SystemUserM(id=null, username=null, password=null, createTime=null)
         log.info("EntityTpye1:"+entityTpye.getClass());//class com.glen.glengen.entity.SystemUserM

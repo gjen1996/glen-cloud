@@ -4,6 +4,9 @@ package com.glen.glengen.util;/**
  * @Description
  */
 
+import com.glen.glencommonsystem.util.R;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.BufferedReader;
@@ -12,25 +15,26 @@ import java.io.InputStreamReader;
 
 /**
  * @author Glen
- * @create 2020/9/11 17:00 
- * @Description
+ * @create 2020/9/11 17:00
+ * @Description 将java文件转为class文件
  */
-public class Compiler {
-    public void compiler1(){
-        String javaAbsolutePath = "D:/test/AlTest1.java";
+@Slf4j
+public class CompilerUtil {
+    public static R compilerFirstTpye(String fireUrl) {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        compiler.run(null, null, null, "-encoding", "UTF-8", "-classpath", javaAbsolutePath.toString(), javaAbsolutePath);
+        compiler.run(null, null, null, "-encoding", "UTF-8", "-classpath", fireUrl.toString(), fireUrl);
+        return R.ok();
     }
-    public void compiler2(){
-        String javaAbsolutePath = "D:/test/AlTest2.java";
 
+    public static R compilerSecondTpye(String fireUrl) {
+        log.info(".class文件转化fireUrl:"+fireUrl);
         try {
-            Process process = Runtime.getRuntime().exec("javac -classpath D:/test/ " + javaAbsolutePath);
+            Process process = Runtime.getRuntime().exec("javac -classpath " + fireUrl);
             InputStream errorStream = process.getErrorStream();
             InputStreamReader inputStreamReader = new InputStreamReader(errorStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String line = null;
-            while ((line=bufferedReader.readLine()) != null){
+            while ((line = bufferedReader.readLine()) != null) {
                 System.out.println(line);
             }
             int exitVal = process.waitFor();
@@ -38,8 +42,8 @@ public class Compiler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return R.ok();
     }
-
 
 
 }
