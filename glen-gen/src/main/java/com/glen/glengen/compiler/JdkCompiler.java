@@ -26,9 +26,9 @@ public final class JdkCompiler {
         // 设置编译参数
         List<String> options = new ArrayList<>();
         options.add("-source");
-        options.add("1.6");
+        options.add("1.8");
         options.add("-target");
-        options.add("1.6");
+        options.add("1.8");
         // 获取标准的Java文件管理器实例
         StandardJavaFileManager manager = compiler.getStandardFileManager(DIAGNOSTIC_COLLECTOR, null, null);
         // 初始化自定义类加载器

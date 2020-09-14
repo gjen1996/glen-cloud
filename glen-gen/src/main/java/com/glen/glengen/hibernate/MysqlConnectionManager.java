@@ -15,8 +15,8 @@ import java.sql.*;
  */
 public interface MysqlConnectionManager {
         String USER_NAME = "root";
-        String PASS_WORD = "root";
-        String URL = "jdbc:mysql://localhost:3306/mysql?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false";
+        String PASS_WORD = "glen1996";
+        String URL = "jdbc:mysql://localhost:3306/springauth?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&characterSetResults=utf8";
 
         Connection newConnection() throws SQLException;
 

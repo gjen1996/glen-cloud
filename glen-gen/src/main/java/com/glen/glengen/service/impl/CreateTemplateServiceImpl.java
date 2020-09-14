@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.glen.glencommonsystem.util.R;
 import com.glen.glengen.compiler.JdkCompiler;
 import com.glen.glengen.dao.CreateTemplateDao;
+import com.glen.glengen.hibernate.MysqlConnectionManager;
+import com.glen.glengen.hibernate.ResultHandler;
+import com.glen.glengen.hibernate.SqlExecutor;
 import com.glen.glengen.service.CreateTemplateService;
 import com.glen.glengen.templates.EntityTemplate;
 import com.glen.glengen.util.CopyDirOpeUtil;
@@ -45,12 +48,12 @@ public class CreateTemplateServiceImpl implements CreateTemplateService {
         log.info("z这个是最终数据："+param);
         CopyDirOpeUtil.moveFile(fileUrl.toString(),param.getString("endPath"),classFileName);
         //开始动态编译
-       JdkCompiler.compile(
-               param.getString("packageName"),
-               FileOperationUtil.className(param.getString("className"),true),
+        JdkCompiler.compile(
+                param.getString("packageName"),
+                FileOperationUtil.className(param.getString("className"),true),
                 SOURCE_CODE,
-                null,
-                null);
+                new Class[]{MysqlConnectionManager.class, SqlExecutor.class, ResultHandler.class, String.class},
+                new Object[]{MysqlConnectionManager.X, SqlExecutor.X, ResultHandler.X, null});
        // CompilerUtil.compilerSecondTpye(param.getString("endPath")+classFileName);
         //进行数据存取
         createTemplateDao.createTables(param);
