@@ -31,24 +31,24 @@ import java.util.Properties;
 @PropertySource(value = { "classpath:bootstrap.yml" })
 public class HibernateConfig {
     @Autowired
-    private Environment environment;
+    private  Environment environment;
     @Value("${spring.jpa.properties.hibernate.current_session_context_class}")
-    public String current_session_context_class;
+    public  String current_session_context_class;
     @Value("${spring.jpa.hibernate.ddl-auto}")
-    public String hibernate_ddl_auto;
+    public  String hibernate_ddl_auto;
     @Value("${spring.jpa.properties.hibernate.show-sql}")
-    public String hibernate_show_sql;
+    public  String hibernate_show_sql;
     @Value("${spring.jpa.properties.hibernate.cache.use_second_level_cache}")
-    public String cache_use_second_level_cache;
+    public  String cache_use_second_level_cache;
     @Value("${spring.jpa.properties.hibernate.cache.use_query_cache}")
-    public String cache_use_query_cache;
+    public  String cache_use_query_cache;
 
     //session factory
     @Bean
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan(new String[] { "com.glen.glengen.entity","com.glen.glengen.dao" });
+        sessionFactory.setPackagesToScan(new String[] { "com.glen.glengen.entity","com.glen.glengen.dao"});
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
     }
@@ -56,21 +56,21 @@ public class HibernateConfig {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(environment.getRequiredProperty("spring.datasource.druid.driver-class-name"));
-        dataSource.setUrl(environment.getRequiredProperty("spring.datasource.druid.url"));
-        dataSource.setUsername(environment.getRequiredProperty("spring.datasource.druid.username"));
-        dataSource.setPassword(environment.getRequiredProperty("spring.datasource.druid.password"));
+        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/springauth?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&characterSetResults=utf8");
+        dataSource.setUsername("root");
+        dataSource.setPassword("glen1996");
         return dataSource;
     }
     //获取hibernate配置
     private Properties hibernateProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.current_session_context_class", current_session_context_class);
+        properties.setProperty("hibernate.current_session_context_class", "org.springframework.orm.hibernate5.SpringSessionContext");
         properties.setProperty("hibernate.current_session_context_class", "thread");
-        properties.setProperty("hibernate.hbm2ddl.auto", hibernate_ddl_auto);
-        properties.setProperty("hibernate.show-sql", hibernate_show_sql);
-        properties.setProperty("hibernate.cache.use_second_level_cache", cache_use_second_level_cache);
-        properties.setProperty("hibernate.cache.use_query_cache", cache_use_query_cache);
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");
+        properties.setProperty("hibernate.show-sql", "false");
+        properties.setProperty("hibernate.cache.use_second_level_cache", "false");
+        properties.setProperty("hibernate.cache.use_query_cache", "false");
         return properties;
     }
     // 配置jpa事务管理器

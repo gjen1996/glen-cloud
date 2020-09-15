@@ -33,7 +33,7 @@ public class EntityTemplate {
                 "import lombok.Data;\n" +
                 "\n" +
                 "import javax.persistence.*;\n" +
-                 "import "+params.getString("packageName")+".*; \n"+
+                "import javax.persistence.Entity;\n"+
                 "import java.util.Date;\n\n");
         content.append("@Data\n" +
                 "@Entity\n" +

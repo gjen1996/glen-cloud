@@ -59,13 +59,13 @@ public class CreateTemplateServiceImpl implements CreateTemplateService {
         MkdirDirOpeUtil.createFile(fileUrl.toString(), classFileName);
         EntityTemplate.EntityTemplateWriteFile(param);
         //开始动态编
+        CompilerUtil.compilerFirstTpye(param);
         Object entityTpye = JdkCompiler.compile(
                 param.getString("packageName"),
                 FileOperationUtil.className(param.getString("className"), true),
                 SOURCE_CODE,
                 new Class[]{MysqlConnectionManager.class, SqlExecutor.class, ResultHandler.class, String.class},
                 new Object[]{MysqlConnectionManager.X, SqlExecutor.X, ResultHandler.X, null});
-        CompilerUtil.compilerFirstTpye(param.getString("endPath")+classFileName);
         //这是一个测试例子
 //        JdkCompiler.compile(
 //                param.getString("packageName"),

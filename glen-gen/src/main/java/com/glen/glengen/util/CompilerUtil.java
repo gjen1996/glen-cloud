@@ -4,6 +4,7 @@ package com.glen.glengen.util;/**
  * @Description
  */
 
+import com.alibaba.fastjson.JSONObject;
 import com.glen.glencommonsystem.util.R;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,11 +21,11 @@ import java.io.InputStreamReader;
  */
 @Slf4j
 public class CompilerUtil {
-    public static R compilerFirstTpye(String fireUrl) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public static R compilerFirstTpye(JSONObject param) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
-        log.info("user.dir"+System.getProperty("user.dir")+"----"+"\\glen-gen\\target\\classes\\com\\glen\\glengen\\entity");
-        log.info("fireUrlCompiler:"+fireUrl);
-        int status = javac.run(null, null, null, "-d", System.getProperty("user.dir")+"\\glen-gen\\target\\classes",fireUrl);
+        log.info("fireUrlCompiler:"+param);
+        int status = javac.run(null, null, null, "-d",param.getString("classFilePath"), param.getString("endPath")+param.getString("classFileName"));
+        log.info("status:"+status);
         return R.ok();
     }
 

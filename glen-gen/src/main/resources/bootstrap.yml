@@ -10,6 +10,8 @@ eureka:
 spring:
   application:
     name: glen-gen
+    admin:
+      enabled: false
   profiles: dev
   security:
     user:
