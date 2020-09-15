@@ -20,9 +20,11 @@ import java.io.InputStreamReader;
  */
 @Slf4j
 public class CompilerUtil {
-    public static R compilerFirstTpye(String fireUrl) {
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        compiler.run(null, null, null, "-encoding", "UTF-8", "-classpath", fireUrl.toString(), fireUrl);
+    public static R compilerFirstTpye(String fireUrl) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
+        log.info("user.dir"+System.getProperty("user.dir")+"----"+"\\glen-gen\\target\\classes\\com\\glen\\glengen\\entity");
+        log.info("fireUrlCompiler:"+fireUrl);
+        int status = javac.run(null, null, null, "-d", System.getProperty("user.dir")+"\\glen-gen\\target\\classes",fireUrl);
         return R.ok();
     }
 

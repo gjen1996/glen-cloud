@@ -58,14 +58,9 @@ public final class JdkCompiler {
                 null,
                 Lists.newArrayList(javaFileObject)
         );
-         Boolean result = compilationTask.call();
+        Boolean result = compilationTask.call();
         System.out.println(String.format("编译[%s]结果:%s", qualifiedName, result));
-        Class entityClass = Class.forName(className);
-        Object obj=entityClass.newInstance();
-        //Class<?> klass = classLoader.loadClass(qualifiedName);
-        log.info("这个是entityClass："+entityClass);
-        log.info("这个是obj："+obj);
-        return (T) entityClass;
-      //  return (T) klass.getDeclaredConstructor(constructorParamTypes).newInstance(constructorParams);
+        Class<?> entityClass = classLoader.loadClass(qualifiedName);
+        return (T) entityClass.getDeclaredConstructor().newInstance();
     }
 }

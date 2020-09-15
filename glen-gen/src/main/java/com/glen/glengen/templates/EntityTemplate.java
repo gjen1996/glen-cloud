@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class EntityTemplate {
 
     public static R EntityTemplateWriteFile(JSONObject params) {
-        log.info("EntityTemplateWriteFile---params" + "---" + params);
+        //log.info("EntityTemplateWriteFile---params" + "---" + params);
 
         StringBuffer content = new StringBuffer("package " + params.getString("packageName") +";"+"\n");
         content.append("/**\n" +
@@ -33,15 +33,16 @@ public class EntityTemplate {
                 "import lombok.Data;\n" +
                 "\n" +
                 "import javax.persistence.*;\n" +
+                 "import "+params.getString("packageName")+".*; \n"+
                 "import java.util.Date;\n\n");
         content.append("@Data\n" +
                 "@Entity\n" +
                 "@Table(name= \"" + FileOperationUtil.tableName(params.getString("className")) + "\")\n");
-        content.append("public class " + FileOperationUtil.className(params.getString("className"), true) + "{\n");
+        content.append("public class " + params.getString("classNameStand") + "{\n");
         //循环输出变量
-        log.info("params" + params.getString("vars"));
+       // log.info("params" + params.getString("vars"));
         JSONArray array = params.getJSONArray("vars");
-        log.info("array:" + array);
+       // log.info("array:" + array);
         for (int i = 0; i < array.size(); i++) {
             JSONObject jo = array.getJSONObject(i);
             content.append("    /**\n" +
@@ -55,6 +56,8 @@ public class EntityTemplate {
             }
             content.append("    private " + jo.getString("varTpye") + " " + jo.getString("varName") + ";\n\n");
         }
+        content.append("    public "+ params.getString("classNameStand")+"() {\n"
+                + "        super();\n"+"    }\n");
         content.append("}");
         ContentOperationUtil.contentOperation(params,content);
         return R.ok().put("msgDetials","文件生成成功！").put("SOURCE_CODE",content.toString());

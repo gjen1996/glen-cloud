@@ -31,15 +31,17 @@ public class CreateTemplateDaoImpl extends Object implements CreateTemplateDao {
     }
 
     @Override
-    public <T> R createTables(JSONObject r) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public <T> R createTables(JSONObject r,Object entityTpye1) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         log.info("R:"+r);
        // Class entityClass = (Class) Class.forName("com.glen.glengen.entity."+r.getString("classNameStand"));
-        Object entityTpye = Class.forName("com.glen.glengen.entity."+r.getString("classNameStand")).newInstance();
+        Class clz = Class.forName("com.glen.glengen.entity.SystemctlUserEntity");//返回与带有给定字符串名的类 或接口相关联的 Class 对象。
+        Object o = clz.newInstance();
+        log.info("o:"+o);
         Serializable s = null;
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         try {
-            s = session.save(entityTpye);
+            s = session.save(o);
             log.info("s:" + s);
         } catch (Exception e) {
             e.printStackTrace();

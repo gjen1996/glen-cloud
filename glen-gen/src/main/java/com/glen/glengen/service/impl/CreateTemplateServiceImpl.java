@@ -9,6 +9,7 @@ import com.glen.glengen.hibernate.ResultHandler;
 import com.glen.glengen.hibernate.SqlExecutor;
 import com.glen.glengen.service.CreateTemplateService;
 import com.glen.glengen.templates.EntityTemplate;
+import com.glen.glengen.util.CompilerUtil;
 import com.glen.glengen.util.CopyDirOpeUtil;
 import com.glen.glengen.util.FileOperationUtil;
 import com.glen.glengen.util.MkdirDirOpeUtil;
@@ -17,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import static com.glen.glengen.util.CompilerUtil.compilerFirstTpye;
 
 /**
  * @author ???
@@ -29,35 +32,40 @@ import javax.transaction.Transactional;
 public class CreateTemplateServiceImpl implements CreateTemplateService {
     @Autowired
     private CreateTemplateDao createTemplateDao;
-    String SOURCE_CODE =null;
+    String SOURCE_CODE = null;
+
     @Override
     public R createTables(JSONObject param) throws Exception {
         String packageName = FileOperationUtil.packageNmae(param.getString("packageName"));
-        log.info("packageName:"+packageName);
+        log.info("packageName:" + packageName);
         StringBuffer fileUrl = new StringBuffer(param.getString("startFileUrl"));
         fileUrl.append(packageName);
-        log.info("fileUrl:"+fileUrl);
-        //格式化文件
-        String classFileName = FileOperationUtil.className(param.getString("className"),false);
+        log.info("fileUrl:" + fileUrl);
+        //格式化文件 带.java 例如UserDao.java
+        String classFileName = FileOperationUtil.className(param.getString("className"), false);
+        //格式化文件 不带.java 例如UserDao
+        String classNameStand = FileOperationUtil.className(param.getString("className"), true);
         //创建文件
-        MkdirDirOpeUtil.createFile(fileUrl.toString(),classFileName);
-        param.put("fileUrl",fileUrl.toString());
-        param.put("classNameStand",FileOperationUtil.className(param.getString("className"),true));
-        param.put("classFileName",classFileName);
+        MkdirDirOpeUtil.createFile(fileUrl.toString(), classFileName);
+        param.put("fileUrl", fileUrl.toString());
+        param.put("classNameStand", classNameStand);
+        param.put("classFileName", classFileName);
         SOURCE_CODE = EntityTemplate.EntityTemplateWriteFile(param).getString("SOURCE_CODE");
-        log.info("SOURCE_CODE:"+SOURCE_CODE);
-        log.info("z这个是最终数据："+param);
+//        log.info("SOURCE_CODE:" + SOURCE_CODE);
+        log.info("z这个是最终数据：" + param);
         //移动文件
-        CopyDirOpeUtil.moveFile(fileUrl.toString(),param.getString("endPath"),classFileName);
+        CopyDirOpeUtil.moveFile(fileUrl.toString(), param.getString("endPath"), classFileName);
         //创建文件
-        MkdirDirOpeUtil.createFile(fileUrl.toString(),classFileName);
-        //开始动态编译
-        JdkCompiler.compile(
+        MkdirDirOpeUtil.createFile(fileUrl.toString(), classFileName);
+        EntityTemplate.EntityTemplateWriteFile(param);
+        //开始动态编
+        Object entityTpye = JdkCompiler.compile(
                 param.getString("packageName"),
-                FileOperationUtil.className(param.getString("className"),true),
+                FileOperationUtil.className(param.getString("className"), true),
                 SOURCE_CODE,
-                null,
-                null);
+                new Class[]{MysqlConnectionManager.class, SqlExecutor.class, ResultHandler.class, String.class},
+                new Object[]{MysqlConnectionManager.X, SqlExecutor.X, ResultHandler.X, null});
+        CompilerUtil.compilerFirstTpye(param.getString("endPath")+classFileName);
         //这是一个测试例子
 //        JdkCompiler.compile(
 //                param.getString("packageName"),
@@ -65,10 +73,9 @@ public class CreateTemplateServiceImpl implements CreateTemplateService {
 //                SOURCE_CODE,
 //                new Class[]{MysqlConnectionManager.class, SqlExecutor.class, ResultHandler.class, String.class},
 //                new Object[]{MysqlConnectionManager.X, SqlExecutor.X, ResultHandler.X, null});
-       // CompilerUtil.compilerSecondTpye(param.getString("endPath")+classFileName);
+        // CompilerUtil.compilerSecondTpye(param.getString("endPath")+classFileName);
         //进行数据存取
-        createTemplateDao.createTables(param);
-
+        createTemplateDao.createTables(param, entityTpye);
         return R.ok();
     }
 }
