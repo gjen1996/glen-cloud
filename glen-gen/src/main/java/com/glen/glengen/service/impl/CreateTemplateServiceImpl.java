@@ -37,8 +37,9 @@ public class CreateTemplateServiceImpl implements CreateTemplateService {
         StringBuffer fileUrl = new StringBuffer(param.getString("startFileUrl"));
         fileUrl.append(packageName);
         log.info("fileUrl:"+fileUrl);
-        //????
+        //格式化文件
         String classFileName = FileOperationUtil.className(param.getString("className"),false);
+        //创建文件
         MkdirDirOpeUtil.createFile(fileUrl.toString(),classFileName);
         param.put("fileUrl",fileUrl.toString());
         param.put("classNameStand",FileOperationUtil.className(param.getString("className"),true));
@@ -46,14 +47,24 @@ public class CreateTemplateServiceImpl implements CreateTemplateService {
         SOURCE_CODE = EntityTemplate.EntityTemplateWriteFile(param).getString("SOURCE_CODE");
         log.info("SOURCE_CODE:"+SOURCE_CODE);
         log.info("z这个是最终数据："+param);
+        //移动文件
         CopyDirOpeUtil.moveFile(fileUrl.toString(),param.getString("endPath"),classFileName);
+        //创建文件
+        MkdirDirOpeUtil.createFile(fileUrl.toString(),classFileName);
         //开始动态编译
         JdkCompiler.compile(
                 param.getString("packageName"),
                 FileOperationUtil.className(param.getString("className"),true),
                 SOURCE_CODE,
-                new Class[]{MysqlConnectionManager.class, SqlExecutor.class, ResultHandler.class, String.class},
-                new Object[]{MysqlConnectionManager.X, SqlExecutor.X, ResultHandler.X, null});
+                null,
+                null);
+        //这是一个测试例子
+//        JdkCompiler.compile(
+//                param.getString("packageName"),
+//                FileOperationUtil.className(param.getString("className"),true),
+//                SOURCE_CODE,
+//                new Class[]{MysqlConnectionManager.class, SqlExecutor.class, ResultHandler.class, String.class},
+//                new Object[]{MysqlConnectionManager.X, SqlExecutor.X, ResultHandler.X, null});
        // CompilerUtil.compilerSecondTpye(param.getString("endPath")+classFileName);
         //进行数据存取
         createTemplateDao.createTables(param);

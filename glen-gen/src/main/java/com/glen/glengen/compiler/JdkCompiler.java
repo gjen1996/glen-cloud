@@ -1,6 +1,8 @@
 package com.glen.glengen.compiler;
 
 import com.google.common.collect.Lists;
+import com.sun.media.jfxmedia.logging.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.tools.*;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.List;
  * @date 2020/9/13 23:15
  * @description 该类的作用
  */
+@Slf4j
 public final class JdkCompiler {
 
     static DiagnosticCollector<JavaFileObject> DIAGNOSTIC_COLLECTOR = new DiagnosticCollector<>();
@@ -38,6 +41,7 @@ public final class JdkCompiler {
         String qualifiedName = packageName + "." + className;
         // 构建Java源文件实例
         CharSequenceJavaFileObject javaFileObject = new CharSequenceJavaFileObject(className, sourceCode);
+
         // 添加Java源文件实例到自定义Java文件管理器实例中
         fileManager.addJavaFileObject(
                 StandardLocation.SOURCE_PATH,
@@ -54,9 +58,14 @@ public final class JdkCompiler {
                 null,
                 Lists.newArrayList(javaFileObject)
         );
-        Boolean result = compilationTask.call();
+         Boolean result = compilationTask.call();
         System.out.println(String.format("编译[%s]结果:%s", qualifiedName, result));
-        Class<?> klass = classLoader.loadClass(qualifiedName);
-        return (T) klass.getDeclaredConstructor(constructorParamTypes).newInstance(constructorParams);
+        Class entityClass = Class.forName(className);
+        Object obj=entityClass.newInstance();
+        //Class<?> klass = classLoader.loadClass(qualifiedName);
+        log.info("这个是entityClass："+entityClass);
+        log.info("这个是obj："+obj);
+        return (T) entityClass;
+      //  return (T) klass.getDeclaredConstructor(constructorParamTypes).newInstance(constructorParams);
     }
 }

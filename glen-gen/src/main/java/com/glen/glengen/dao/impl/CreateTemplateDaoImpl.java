@@ -35,11 +35,6 @@ public class CreateTemplateDaoImpl extends Object implements CreateTemplateDao {
         log.info("R:"+r);
        // Class entityClass = (Class) Class.forName("com.glen.glengen.entity."+r.getString("classNameStand"));
         Object entityTpye = Class.forName("com.glen.glengen.entity."+r.getString("classNameStand")).newInstance();
-        log.info("EntityTpye:"+entityTpye);//SystemUserM(id=null, username=null, password=null, createTime=null)
-        log.info("EntityTpye1:"+entityTpye.getClass());//class com.glen.glengen.entity.SystemUserM
-        log.info("EntityTpye2:"+entityTpye.getClass().getDeclaringClass());//null
-        log.info("EntityTpye3:"+entityTpye.getClass().getComponentType());//null
-        log.info("EntityTpye4:"+entityTpye.getClass().getSuperclass());//class java.lang.Object
         Serializable s = null;
         Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
