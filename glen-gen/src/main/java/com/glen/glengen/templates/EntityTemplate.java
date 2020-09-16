@@ -33,12 +33,13 @@ public class EntityTemplate {
                 "import lombok.Data;\n" +
                 "\n" +
                 "import javax.persistence.*;\n" +
+                "import java.io.Serializable;\n"+
                 "import javax.persistence.Entity;\n"+
                 "import java.util.Date;\n\n");
         content.append("@Data\n" +
                 "@Entity\n" +
                 "@Table(name= \"" + FileOperationUtil.tableName(params.getString("className")) + "\")\n");
-        content.append("public class " + params.getString("classNameStand") + "{\n");
+        content.append("public class " + params.getString("classNameStand") +" implements Serializable {\n");
         //循环输出变量
        // log.info("params" + params.getString("vars"));
         JSONArray array = params.getJSONArray("vars");

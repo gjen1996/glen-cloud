@@ -15,6 +15,10 @@ import com.glen.glengen.util.FileOperationUtil;
 import com.glen.glengen.util.MkdirDirOpeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -30,6 +34,8 @@ import static com.glen.glengen.util.CompilerUtil.compilerFirstTpye;
 @Service
 @Transactional
 public class CreateTemplateServiceImpl implements CreateTemplateService {
+    @Autowired
+    private ApplicationContext applicationContext;
     @Autowired
     private CreateTemplateDao createTemplateDao;
     String SOURCE_CODE = null;
@@ -60,12 +66,25 @@ public class CreateTemplateServiceImpl implements CreateTemplateService {
         EntityTemplate.EntityTemplateWriteFile(param);
         //开始动态编
         CompilerUtil.compilerFirstTpye(param);
+        Class clz = Class.forName(param.getString("packageName") + "." + param.getString("classNameStand"));
+        log.info("clz:" + clz);
+        Object o = clz.newInstance();
+        log.info("o:"+o);
+        ConfigurableApplicationContext context = (ConfigurableApplicationContext)applicationContext;
+        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory)context.getBeanFactory();
+        BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.rootBeanDefinition(clz);
+        //设置bean属性
+        beanDefinitionBuilder.addPropertyValue("id", "1");
+        //注册到spring容器中
+        beanFactory.registerBeanDefinition(param.getString("classNameStand"), beanDefinitionBuilder.getBeanDefinition());
+        log.info("bean:" + applicationContext.getBean(clz));
         Object entityTpye = JdkCompiler.compile(
                 param.getString("packageName"),
                 FileOperationUtil.className(param.getString("className"), true),
                 SOURCE_CODE,
-                new Class[]{MysqlConnectionManager.class, SqlExecutor.class, ResultHandler.class, String.class},
-                new Object[]{MysqlConnectionManager.X, SqlExecutor.X, ResultHandler.X, null});
+                new Class[]{MysqlConnectionManager.class, SqlExecutor.class, ResultHandler.class, String.class,clz},
+                new Object[]{MysqlConnectionManager.X, SqlExecutor.X, ResultHandler.X, o});
+        log.info("entityTpye:"+entityTpye);
         //这是一个测试例子
 //        JdkCompiler.compile(
 //                param.getString("packageName"),
@@ -75,7 +94,7 @@ public class CreateTemplateServiceImpl implements CreateTemplateService {
 //                new Object[]{MysqlConnectionManager.X, SqlExecutor.X, ResultHandler.X, null});
         // CompilerUtil.compilerSecondTpye(param.getString("endPath")+classFileName);
         //进行数据存取
-        createTemplateDao.createTables(param, entityTpye);
+        createTemplateDao.createTables(param, o);
         return R.ok();
     }
 }

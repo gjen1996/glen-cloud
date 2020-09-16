@@ -48,7 +48,7 @@ public class HibernateConfig {
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan(new String[] { "com.glen.glengen.entity","com.glen.glengen.dao"});
+        sessionFactory.setPackagesToScan(new String[] { "com.glen.glengen.entity"});
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
     }
@@ -56,7 +56,7 @@ public class HibernateConfig {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/springauth?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&characterSetResults=utf8");
         dataSource.setUsername("root");
         dataSource.setPassword("glen1996");

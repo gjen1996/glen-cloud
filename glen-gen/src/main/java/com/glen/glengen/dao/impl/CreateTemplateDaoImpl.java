@@ -33,8 +33,6 @@ public class CreateTemplateDaoImpl extends Object implements CreateTemplateDao {
 
     @Autowired
     private EntityManagerFactory entityManagerFactory;
-    @Autowired
-    private ApplicationContext applicationContext;
 
     /**
      * @author Glen
@@ -46,29 +44,20 @@ public class CreateTemplateDaoImpl extends Object implements CreateTemplateDao {
     }
 
     @Override
-    public <T> R createTables(JSONObject r, Object entityTpye1) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        log.info("R:" + r);
+    public <T> R createTables(JSONObject param, Object entityTpye) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         // Class entityClass = (Class) Class.forName("com.glen.glengen.entity."+r.getString("classNameStand"));
         //返回与带有给定字符串名的类 或接口相关联的 Class 对象。
-        Class clz = Class.forName(r.getString("packageName") + "." + r.getString("classNameStand"));
+        Class clz = Class.forName(param.getString("packageName") + "." + param.getString("classNameStand"));
         log.info("clz:" + clz);
         Object o = clz.newInstance();
-        log.info("o:" + o);
-
-        ConfigurableApplicationContext context = (ConfigurableApplicationContext)applicationContext;
-        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory)context.getBeanFactory();
-        BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.rootBeanDefinition(clz);
-        //设置bean属性
-       beanDefinitionBuilder.addPropertyValue("id", "1");
-        //注册到spring容器中
-        beanFactory.registerBeanDefinition("userService", beanDefinitionBuilder.getBeanDefinition());
-        log.info("bean:" + applicationContext.getBean(clz));
+        log.info("o:"+o);
         Serializable s = null;
         HibernateConfig hibernateConfig =new HibernateConfig();
         hibernateConfig.sessionFactory();
         Session session =getCurrentSession();
         Transaction tx = session.beginTransaction();
         try {
+            session.load(o,"1");
             s = session.save(o);
             log.info("s:" + s);
         } catch (Exception e) {

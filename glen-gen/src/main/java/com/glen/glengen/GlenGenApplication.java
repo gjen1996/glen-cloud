@@ -3,6 +3,7 @@ package com.glen.glengen;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //java.lang.ClassCastException: org.springframework.orm.jpa.EntityManagerHolder cannot be cast to org.springframework.orm.hibernate5.SessionHolder
 @ComponentScan("com.glen")
 @EnableCaching
+@EntityScan( basePackages = {"com.glen.glengen.entity"})
 @SpringBootApplication(exclude = {
         DataSourceAutoConfiguration.class,
         JpaRepositoriesAutoConfiguration.class,

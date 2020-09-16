@@ -61,6 +61,6 @@ public final class JdkCompiler {
         Boolean result = compilationTask.call();
         System.out.println(String.format("编译[%s]结果:%s", qualifiedName, result));
         Class<?> entityClass = classLoader.loadClass(qualifiedName);
-        return (T) entityClass.getDeclaredConstructor().newInstance();
+        return (T) entityClass.getDeclaredConstructor(constructorParamTypes).newInstance(constructorParams);
     }
 }
