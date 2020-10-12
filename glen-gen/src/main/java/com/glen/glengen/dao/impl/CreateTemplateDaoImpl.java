@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManagerFactory;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 
 @Slf4j
 @Service
@@ -44,12 +45,7 @@ public class CreateTemplateDaoImpl extends Object implements CreateTemplateDao {
     }
 
     @Override
-    public <T> R createTables(JSONObject param, Object entityTpye) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        // Class entityClass = (Class) Class.forName("com.glen.glengen.entity."+r.getString("classNameStand"));
-        //返回与带有给定字符串名的类 或接口相关联的 Class 对象。
-        Class clz = Class.forName(param.getString("packageName") + "." + param.getString("classNameStand"));
-        log.info("clz:" + clz);
-        Object o = clz.newInstance();
+    public <T> R createTables(JSONObject param, Object o) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         log.info("o:"+o);
         Serializable s = null;
         HibernateConfig hibernateConfig =new HibernateConfig();
@@ -57,7 +53,7 @@ public class CreateTemplateDaoImpl extends Object implements CreateTemplateDao {
         Session session =getCurrentSession();
         Transaction tx = session.beginTransaction();
         try {
-            session.load(o,"1");
+//            session.load(clz,1L);
             s = session.save(o);
             log.info("s:" + s);
         } catch (Exception e) {
@@ -65,6 +61,5 @@ public class CreateTemplateDaoImpl extends Object implements CreateTemplateDao {
         }
         tx.commit();
         return R.ok();
-
     }
 }

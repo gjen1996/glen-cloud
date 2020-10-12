@@ -3,10 +3,9 @@ package com.glen.glengen.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.glen.glencommonsystem.util.R;
 import com.glen.glengen.compiler.JdkCompiler;
+import com.glen.glengen.compiler.MyClassLoader;
 import com.glen.glengen.dao.CreateTemplateDao;
-import com.glen.glengen.hibernate.MysqlConnectionManager;
-import com.glen.glengen.hibernate.ResultHandler;
-import com.glen.glengen.hibernate.SqlExecutor;
+import com.glen.glengen.compiler.MysqlConnectionManager;
 import com.glen.glengen.service.CreateTemplateService;
 import com.glen.glengen.templates.EntityTemplate;
 import com.glen.glengen.util.CompilerUtil;
@@ -22,8 +21,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-
-import static com.glen.glengen.util.CompilerUtil.compilerFirstTpye;
 
 /**
  * @author ???
@@ -66,10 +63,11 @@ public class CreateTemplateServiceImpl implements CreateTemplateService {
         EntityTemplate.EntityTemplateWriteFile(param);
         //开始动态编
         CompilerUtil.compilerFirstTpye(param);
+        ClassLoader pcl = new MyClassLoader(param.getString("classFilePath"));
+        Class c = pcl.loadClass(param.getString("packageName")+"."+classNameStand);
         Class clz = Class.forName(param.getString("packageName") + "." + param.getString("classNameStand"));
         log.info("clz:" + clz);
         Object o = clz.newInstance();
-        log.info("o:"+o);
         ConfigurableApplicationContext context = (ConfigurableApplicationContext)applicationContext;
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory)context.getBeanFactory();
         BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.rootBeanDefinition(clz);
@@ -78,23 +76,10 @@ public class CreateTemplateServiceImpl implements CreateTemplateService {
         //注册到spring容器中
         beanFactory.registerBeanDefinition(param.getString("classNameStand"), beanDefinitionBuilder.getBeanDefinition());
         log.info("bean:" + applicationContext.getBean(clz));
-        Object entityTpye = JdkCompiler.compile(
-                param.getString("packageName"),
-                FileOperationUtil.className(param.getString("className"), true),
-                SOURCE_CODE,
-                new Class[]{MysqlConnectionManager.class, SqlExecutor.class, ResultHandler.class, String.class,clz},
-                new Object[]{MysqlConnectionManager.X, SqlExecutor.X, ResultHandler.X, o});
-        log.info("entityTpye:"+entityTpye);
-        //这是一个测试例子
-//        JdkCompiler.compile(
-//                param.getString("packageName"),
-//                FileOperationUtil.className(param.getString("className"),true),
-//                SOURCE_CODE,
-//                new Class[]{MysqlConnectionManager.class, SqlExecutor.class, ResultHandler.class, String.class},
-//                new Object[]{MysqlConnectionManager.X, SqlExecutor.X, ResultHandler.X, null});
-        // CompilerUtil.compilerSecondTpye(param.getString("endPath")+classFileName);
+        log.info("c.newInstance():"+c.newInstance());
+        log.info("entityTpye:"+o);
         //进行数据存取
-        createTemplateDao.createTables(param, o);
+        createTemplateDao.createTables(param, applicationContext.getBean(clz));
         return R.ok();
     }
 }

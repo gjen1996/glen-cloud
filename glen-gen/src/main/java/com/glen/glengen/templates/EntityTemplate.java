@@ -23,7 +23,7 @@ public class EntityTemplate {
     public static R EntityTemplateWriteFile(JSONObject params) {
         //log.info("EntityTemplateWriteFile---params" + "---" + params);
 
-        StringBuffer content = new StringBuffer("package " + params.getString("packageName") +";"+"\n");
+        StringBuffer content = new StringBuffer("package " + params.getString("packageName") + ";" + "\n");
         content.append("/**\n" +
                 " * @author " + params.getString("author") + "\n" +
                 " * @create " + DateUtils.currentTime() + "\n" +
@@ -33,17 +33,17 @@ public class EntityTemplate {
                 "import lombok.Data;\n" +
                 "\n" +
                 "import javax.persistence.*;\n" +
-                "import java.io.Serializable;\n"+
-                "import javax.persistence.Entity;\n"+
+                "import java.io.Serializable;\n" +
+                "import javax.persistence.Entity;\n" +
                 "import java.util.Date;\n\n");
         content.append("@Data\n" +
                 "@Entity\n" +
                 "@Table(name= \"" + FileOperationUtil.tableName(params.getString("className")) + "\")\n");
-        content.append("public class " + params.getString("classNameStand") +" implements Serializable {\n");
+        content.append("public class " + params.getString("classNameStand") + " implements Serializable {\n");
         //循环输出变量
-       // log.info("params" + params.getString("vars"));
+        // log.info("params" + params.getString("vars"));
         JSONArray array = params.getJSONArray("vars");
-       // log.info("array:" + array);
+        // log.info("array:" + array);
         for (int i = 0; i < array.size(); i++) {
             JSONObject jo = array.getJSONObject(i);
             content.append("    /**\n" +
@@ -52,15 +52,24 @@ public class EntityTemplate {
             if ("1".equals(jo.getString("isPrimaryKey"))) {
                 content.append("    @Id\n" + "    @GeneratedValue(strategy= GenerationType.AUTO)\n");
             }
-            if("Date".equals(jo.getString("varTpye"))){
-                content.append("    @JsonFormat(pattern = \"" + jo.getString("pattern")+ "\")\n");
+            if ("Date".equals(jo.getString("varTpye"))) {
+                content.append("    @JsonFormat(pattern = \"" + jo.getString("pattern") + "\")\n");
             }
-            content.append("    private " + jo.getString("varTpye") + " " + jo.getString("varName") + ";\n\n");
+            content.append("    public " + jo.getString("varTpye") + " " + jo.getString("varName") + ";\n\n");
         }
-        content.append("    public "+ params.getString("classNameStand")+"() {\n"
-                + "        super();\n"+"    }\n");
+        content.append("    public " + params.getString("classNameStand") + "(");
+        content.append(array.getJSONObject(0).getString("varTpye") + " " + array.getJSONObject(0).getString("varName")+", ");
+        content.append(array.getJSONObject(1).getString("varTpye") + " " + array.getJSONObject(1).getString("varName")+") {\n");
+        content.append("        this."+array.getJSONObject(0).getString("varName")+"= "+array.getJSONObject(0).getString("varName")+";\n");
+        content.append("        this."+array.getJSONObject(1).getString("varName")+"= "+array.getJSONObject(1).getString("varName")+";\n");
+        content.append("    }\n\n");
+        content.append("    public " + params.getString("classNameStand") + "(){\n"+"   }\n");
         content.append("}");
         ContentOperationUtil.contentOperation(params,content);
-        return R.ok().put("msgDetials","文件生成成功！").put("SOURCE_CODE",content.toString());
-    }
+        return R.ok().
+
+    put("msgDetials","文件生成成功！").
+
+    put("SOURCE_CODE",content.toString());
+}
 }
