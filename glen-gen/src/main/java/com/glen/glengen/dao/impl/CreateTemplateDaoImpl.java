@@ -4,6 +4,7 @@ package com.glen.glengen.dao.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.glen.glencommonsystem.util.R;
 import com.glen.glengen.GlenGenApplication;
+import com.glen.glengen.compiler.MyClassReLoader;
 import com.glen.glengen.config.HibernateConfig;
 import com.glen.glengen.dao.CreateTemplateDao;
 import lombok.extern.slf4j.Slf4j;
@@ -46,14 +47,16 @@ public class CreateTemplateDaoImpl extends Object implements CreateTemplateDao {
 
     @Override
     public <T> R createTables(JSONObject param, Object o) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        log.info("o:"+o);
+        log.info("o:" + o);
+
+
         Serializable s = null;
-        HibernateConfig hibernateConfig =new HibernateConfig();
+        HibernateConfig hibernateConfig = new HibernateConfig();
         hibernateConfig.sessionFactory();
-        Session session =getCurrentSession();
+        Session session = getCurrentSession();
         Transaction tx = session.beginTransaction();
         try {
-//            session.load(clz,1L);
+            //session.load(clz,"1");
             s = session.save(o);
             log.info("s:" + s);
         } catch (Exception e) {

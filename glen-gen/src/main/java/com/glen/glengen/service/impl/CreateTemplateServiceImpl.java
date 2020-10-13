@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.glen.glencommonsystem.util.R;
 import com.glen.glengen.compiler.JdkCompiler;
 import com.glen.glengen.compiler.MyClassLoader;
+import com.glen.glengen.compiler.MyClassReLoader;
 import com.glen.glengen.dao.CreateTemplateDao;
 import com.glen.glengen.compiler.MysqlConnectionManager;
 import com.glen.glengen.service.CreateTemplateService;
@@ -65,21 +66,28 @@ public class CreateTemplateServiceImpl implements CreateTemplateService {
         CompilerUtil.compilerFirstTpye(param);
         ClassLoader pcl = new MyClassLoader(param.getString("classFilePath"));
         Class c = pcl.loadClass(param.getString("packageName")+"."+classNameStand);
-        Class clz = Class.forName(param.getString("packageName") + "." + param.getString("classNameStand"));
-        log.info("clz:" + clz);
-        Object o = clz.newInstance();
+        String path = "D:/project/glen-cloud/glen-gen/target/classes/com/glen/glengen/entity/";
+        MyClassReLoader reloader = new MyClassReLoader(path);
+        Class r = reloader.findClass("TestSuccess.class");
+        String path1 = "D:/project/glen-cloud/glen-gen/target/classes/com/glen/glengen/config/";
+        MyClassReLoader reloader1 = new MyClassReLoader(path);
+        Class r1 = reloader1.findClass("HibernateConfig.class");
+        log.info("clz:" + c);
+        Object o = c.newInstance();
         ConfigurableApplicationContext context = (ConfigurableApplicationContext)applicationContext;
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory)context.getBeanFactory();
-        BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.rootBeanDefinition(clz);
+        BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.rootBeanDefinition(c);
         //设置bean属性
         beanDefinitionBuilder.addPropertyValue("id", "1");
         //注册到spring容器中
         beanFactory.registerBeanDefinition(param.getString("classNameStand"), beanDefinitionBuilder.getBeanDefinition());
-        log.info("bean:" + applicationContext.getBean(clz));
-        log.info("c.newInstance():"+c.newInstance());
+        log.info("bean:" + applicationContext.getBean(c));
+        log.info("c.newInstance():"+o);
         log.info("entityTpye:"+o);
+        log.info("r.getClassLoader:"+r.getClassLoader());
+        log.info("c.getClassLoader:"+c.getClassLoader());
         //进行数据存取
-        createTemplateDao.createTables(param, applicationContext.getBean(clz));
+        createTemplateDao.createTables(param, c.newInstance());
         return R.ok();
     }
 }
