@@ -13,10 +13,12 @@ import java.io.InputStream;
 
 public class MyClassReLoader extends ClassLoader {
     private String classPath;
-    String classname = "com.glen.glengen.entity.TestSuccess";
+    private String classname;
+//    String classname = "com.glen.glengen.entity.TestSuccess";
 
-    public MyClassReLoader(String classpath) {
+    public MyClassReLoader(String classpath,String classname) {
         this.classPath = classpath;
+        this.classname = classname;
     }
 
     @Override
@@ -46,18 +48,18 @@ public class MyClassReLoader extends ClassLoader {
         return null;
     }
 
-    public static void main(String[] args) {
-        try {
-            String path = "D:/project/glen-cloud/glen-gen/target/classes/com/glen/glengen/entity/";
-            MyClassReLoader reloader = new MyClassReLoader(path);
-            Class r = reloader.findClass("TestSuccess.class");
-            System.out.println(r.newInstance());
-//            ClassReloader reloader2 = new ClassReloader(path);
-            Class r2 = reloader.findClass("TestSuccess.class");
-            System.out.println(r2.newInstance());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void main(String[] args) {
+//        try {
+//            String path = "D:/project/glen-cloud/glen-gen/target/classes/com/glen/glengen/entity/";
+//            MyClassReLoader reloader = new MyClassReLoader(path);
+//            Class r = reloader.findClass("TestSuccess.class");
+//            System.out.println(r.newInstance());
+////            ClassReloader reloader2 = new ClassReloader(path);
+//            Class r2 = reloader.findClass("TestSuccess.class");
+//            System.out.println(r2.newInstance());
+//        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
 
