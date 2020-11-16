@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('clone') {
       steps {
-        git 'https://github.com/gjen1996/glen-cloud.git'
+        git(url: 'https://github.com/gjen1996/glen-cloud.git', branch: 'master')
       }
     }
 
