@@ -6,7 +6,7 @@ pipeline {
 
   }
   stages {
-    stage('error') {
+    stage('clone') {
       steps {
         git 'https://github.com/gjen1996/glen-cloud.git'
       }
