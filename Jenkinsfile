@@ -8,6 +8,12 @@ pipeline {
       }
     }
 
+    stage('build') {
+      steps {
+        sh 'sh "mvn clean packahe -DskipTests"'
+      }
+    }
+
   }
   environment {
     credentialsId = '1c0b2feb-65f5-49af-9c77-2752a11fffbe'
