@@ -9,8 +9,11 @@ pipeline {
 
     stage('build') {
       steps {
-        sh 'sh "mvn clean packahe -DskipTests"'
         tool 'Maven3.6'
+        withMaven(maven: 'Maven3.6', globalMavenSettingsConfig: ' /Users/gaiyucheng/software/apache-maven-3.6.2/conf/settings.xml', globalMavenSettingsFilePath: ' /Users/gaiyucheng/software/apache-maven-3.6.2/conf/settings.xml', jdk: 'jdk1.8.0_231', mavenLocalRepo: '/Users/gaiyucheng/software/apache-maven-3.6.2/repository', mavenSettingsConfig: '/Users/gaiyucheng/software/apache-maven-3.6.2/conf/settings.xml', mavenSettingsFilePath: '/Users/gaiyucheng/software/apache-maven-3.6.2/conf/settings.xml') {
+          sh 'sh "mvn clean install -Dskip Tests"'
+        }
+
       }
     }
 
