@@ -4,13 +4,13 @@ pipeline {
     stage('clone') {
       steps {
         git(url: 'https://github.com/gjen1996/glen-cloud.git', branch: 'master', changelog: true)
-        tool 'Maven3.6'
       }
     }
 
     stage('build') {
       steps {
         sh 'sh "mvn clean packahe -DskipTests"'
+        tool 'Maven3.6'
       }
     }
 
