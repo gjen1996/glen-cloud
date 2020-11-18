@@ -11,7 +11,8 @@ pipeline {
       steps {
         tool 'Maven3.6'
         withMaven(maven: 'Maven3.6', jdk: 'openjdk11') {
-          sh 'mvn clean install -DskipTests'
+          sh '''cd glen-eureka
+mvn clean install -DskipTests'''
         }
 
       }
