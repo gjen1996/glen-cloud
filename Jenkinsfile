@@ -11,7 +11,7 @@ pipeline {
       steps {
         tool 'Maven3.6'
         withMaven(maven: 'Maven3.6', jdk: 'openjdk11') {
-          sh 'sh "mvn clean install -DskipTests"'
+          sh 'mvn clean install -DskipTests'
         }
 
       }
