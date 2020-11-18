@@ -1,5 +1,10 @@
 pipeline {
-  agent any
+  agent {
+    node {
+      label 'worker_node1'
+    }
+
+  }
   stages {
     stage('clone') {
       steps {
