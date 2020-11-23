@@ -25,7 +25,10 @@ mvn clean install -DskipTests'''
 
     stage('image') {
       steps {
-        sh 'ls'
+        sh '''cd glen-eureka
+docker -t  docker build -t glen-eureka:v0.0.2-SNAPSHOT .
+docker tag glen-eureka:v0.0.2-SNAPSHOT 192.168.43.166/docker-test/glen-eureka:v0.0.2-SNAPSHOT
+docker push 192.168.43.166/docker-test/glen-eureka:v0.0.2-SNAPSHOT'''
       }
     }
 
