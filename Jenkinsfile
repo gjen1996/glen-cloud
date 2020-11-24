@@ -36,7 +36,7 @@ docker rmi glen-eureka:v$BUILD_ID'''
 
     stage('deploy/upgrade') {
       steps {
-        rancher(image: '192.168.43.166/docker-test/glen-eureka:v$BUILD_ID', environmentId: ' ', service: 'jenkins/glen-eureka', credentialId: '73159fef-c482-44d0-81ea-35577d50a3b3', endpoint: 'https://192.168.43.166:8444/v3', confirm: true, ports: '8081', environments: 'dev:dev', timeout: 600, startFirst: true)
+        rancher(image: '192.168.43.166/docker-test/glen-eureka:v$BUILD_ID', environmentId: 'c-75tmk:p-5gvnj', service: 'jenkins/glen-eureka', credentialId: '73159fef-c482-44d0-81ea-35577d50a3b3', endpoint: 'https://192.168.43.166:8444/v3', confirm: true, ports: '8081', environments: 'dev:dev', timeout: 600, startFirst: true)
       }
     }
 
