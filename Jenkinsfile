@@ -20,7 +20,9 @@ mvn clean install -DskipTests'''
 
     stage('image') {
       steps {
-        sh '''cd glen-eureka
+        sh '''source ~/.bash_profile
+
+cd glen-eureka
 
 docker build -t glen-eureka:v0.0.2-SNAPSHOT .
 
