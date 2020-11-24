@@ -23,6 +23,18 @@ mvn clean install -DskipTests'''
       }
     }
 
+    stage('image') {
+      steps {
+        sh '''cd glen-eureka
+
+docker build -t glen-eureka:v0.0.2-SNAPSHOT .
+
+docker tag glen-eureka:v0.0.2-SNAPSHOT 192.168.43.166/docker-test/glen-eureka:v0.0.2-SNAPSHOT
+
+docker push 192.168.43.166/docker-test/glen-eureka:v0.0.2-SNAPSHOT'''
+      }
+    }
+
   }
   environment {
     credentialsId = '1c0b2feb-65f5-49af-9c77-2752a11fffbe'
