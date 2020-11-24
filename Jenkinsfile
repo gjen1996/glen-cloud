@@ -36,7 +36,7 @@ docker rmi glen-eureka:v$BUILD_ID'''
 
     stage('deploy/upgrade') {
       steps {
-        rancher(image: ' 192.168.43.166/docker-test/glen-eureka:v$BUILD_ID', environmentId: 'k8sformac', service: 'kubernetes', credentialId: '1c0b2feb-65f5-49af-9c77-2752a11fffbe', endpoint: 'docker-desktop', confirm: true, ports: '8081', environments: 'dev', timeout: 600, startFirst: true)
+        rancher(image: '192.168.43.166/docker-test/glen-eureka:v$BUILD_ID', environmentId: 'k8sformac', service: 'jenkins/glen-eureka', credentialId: '1c0b2feb-65f5-49af-9c77-2752a11fffbe', endpoint: 'https://192.168.43.166:8444/v3', confirm: true, ports: '8081', environments: 'dev:dev', timeout: 600, startFirst: true)
       }
     }
 
