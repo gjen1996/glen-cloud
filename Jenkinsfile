@@ -24,11 +24,11 @@ mvn clean install -DskipTests'''
 
 cd glen-eureka
 
-docker build -t glen-eureka:v0.0.2-SNAPSHOT .
+docker build -t glen-eureka:v$BUILD_ID .
 
-docker tag glen-eureka:v0.0.2-SNAPSHOT 192.168.43.166/docker-test/glen-eureka:v0.0.2-SNAPSHOT
+docker tag glen-eureka:v$BUILD_ID 192.168.43.166/docker-test/glen-eureka:v$BUILD_ID
 
-docker push 192.168.43.166/docker-test/glen-eureka:v0.0.2-SNAPSHOT'''
+docker push 192.168.43.166/docker-test/glen-eureka:v$BUILD_ID'''
       }
     }
 
