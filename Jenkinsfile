@@ -36,7 +36,10 @@ docker rmi glen-eureka:v$BUILD_ID'''
 
     stage('deploy/upgrade') {
       steps {
-        rancher(image: '192.168.43.166/docker-test/glen-eureka:v39', environmentId: 'local:p-4xwbm', service: 'test/test-64b9d7b997-498fp', credentialId: '0e1a3601-f028-4751-97b5-c802edc301f1', endpoint: 'https://192.168.43.166:8444/v3', confirm: true, ports: '8555', environments: 'default:test', timeout: 600, startFirst: true)
+        sh '''image="nginx:1.13.0"
+name="nginx"
+url="http://localhost:50020/api/rancherapi/deployUpgrade/v1"
+curl -i -X POST -H \'Content-type\':\'application/json\' -d \'{"image":"\'$image\'","name":"\'$name\'"}\' $url '''
       }
     }
 
