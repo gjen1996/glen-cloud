@@ -39,7 +39,7 @@ docker rmi glen-eureka:v$BUILD_ID'''
         sh '''image="nginx:1.12.0"
 name="nginx"
 url=http://localhost:50020/api/rancherapi/deployUpgrade/v1
-curl -i -X POST -H \'Content-type\':\'application/json\' -d \'{"image":"\'$image\'","name":"\'$name\'"}\' $url '''
+curl -i -X POST -H \'Content-type\':\'application/json\' -d \'{"image":"\'$image\'","name":"\'$name\'"}\' http://localhost:50020/api/rancherapi/deployUpgrade/v1'''
       }
     }
 
