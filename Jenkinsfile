@@ -21,7 +21,11 @@ mvn clean install -DskipTests'''
     stage('sonar') {
       steps {
         sh '''pwd
-ls -al
+result=`echo **/src`
+array=(${result///src/ })
+for var in ${array[@]}
+do
+   echo $var
 /Users/gaiyucheng/software/sonarQube/sonar-scanner-4.5.0.2216-macosx/bin/sonar-scanner -X \\
 -Dsonar.host.url=http://192.168.43.166:9000 \\
 -Dsonar.login=admin \\
@@ -30,9 +34,10 @@ ls -al
 -Dsonar.projectKey=glen-cloud \\
 -Dsonar.projectName=glen-cloud \\
 -Dsonar.projectVersion=$BUILD_NUMBER \\
--Dsonar.sources=glen-eureka/src/ \\
+-Dsonar.sources=$var/src/ \\
 -Dsonar.sourceEncoding=UTF-8 \\
--Dsonar.java.binaries=glen-eureka/target/ \\
+-Dsonar.java.binaries=$var/target/ \\
+done
 '''
       }
     }
