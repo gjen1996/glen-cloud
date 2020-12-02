@@ -9,7 +9,8 @@ pipeline {
 
     stage('sonar') {
       steps {
-        sh '''cd glen-eureka
+        sh '''pwd
+ls -al
 /Users/gaiyucheng/software/sonarQube/sonar-scanner-4.5.0.2216-macosx/bin/sonar-scanner -X \\
 -Dsonar.host.url=http://192.168.43.166:9000 \\
 -Dsonar.login=admin \\
