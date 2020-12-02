@@ -30,7 +30,7 @@ ls -al
 -Dsonar.projectKey=glen-cloud \\
 -Dsonar.projectName=glen-cloud \\
 -Dsonar.projectVersion=$BUILD_NUMBER \\
--Dsonar.sources=/Users/gaiyucheng/.jenkins/workspace/glen-cloud_master/**/src/ \\
+-Dsonar.sources=/Users/gaiyucheng/.jenkins/workspace/glen-cloud_master/glen-eureka/src/ \\
 -Dsonar.sourceEncoding=UTF-8 \\
 -Dsonar.java.binaries=./**/target/ \\
 '''
