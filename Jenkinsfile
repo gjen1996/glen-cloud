@@ -6,8 +6,8 @@ pipeline {
         git(url: 'https://github.com/gjen1996/glen-cloud.git', branch: 'master', changelog: true)
       }
     }
-    
-  stage('sonar') {
+
+    stage('sonar') {
       steps {
         sh '''cd glen-eureka
 /Users/gaiyucheng/software/sonarQube/sonar-scanner-4.5.0.2216-macosx/bin/sonar-scanner -X \\
@@ -18,14 +18,14 @@ pipeline {
 -Dsonar.projectKey=test-sonarqube \\
 -Dsonar.projectName=test-sonarqube \\
 -Dsonar.projectVersion=$BUILD_NUMBER \\
--Dsonar.sources=src/ \\
+-Dsonar.sources=/**/src/ \\
 -Dsonar.sourceEncoding=UTF-8 \\
--Dsonar.java.binaries=target/ \\
--Dsonar.exclusions=src/test/**
+-Dsonar.java.binaries=/**/target/ \\
+-Dsonar.exclusions=/**/src/test/**
 '''
       }
     }
-    
+
     stage('build') {
       steps {
         tool 'Maven3.6'
