@@ -6,6 +6,17 @@ pipeline {
         git(url: 'https://github.com/gjen1996/glen-cloud.git', branch: 'master', changelog: true)
       }
     }
+    
+      stage('build') {
+      steps {
+        tool 'Maven3.6'
+        withMaven(maven: 'Maven3.6', jdk: 'openjdk11') {
+          sh '''cd glen-eureka
+mvn clean install -DskipTests'''
+        }
+
+      }
+    }
 
     stage('sonar') {
       steps {
@@ -16,25 +27,14 @@ ls -al
 -Dsonar.login=admin \\
 -Dsonar.password=admin \\
 -Dsonar.language=java \\
--Dsonar.projectKey=test-sonarqube \\
--Dsonar.projectName=test-sonarqube \\
+-Dsonar.projectKey=glen-cloud \\
+-Dsonar.projectName=glen-cloud \\
 -Dsonar.projectVersion=$BUILD_NUMBER \\
 -Dsonar.sources=./**/src/ \\
 -Dsonar.sourceEncoding=UTF-8 \\
 -Dsonar.java.binaries=./**/target/ \\
 -Dsonar.exclusions=./src/test/**
 '''
-      }
-    }
-
-    stage('build') {
-      steps {
-        tool 'Maven3.6'
-        withMaven(maven: 'Maven3.6', jdk: 'openjdk11') {
-          sh '''cd glen-eureka
-mvn clean install -DskipTests'''
-        }
-
       }
     }
 
