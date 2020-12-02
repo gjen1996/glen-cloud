@@ -27,20 +27,10 @@ result=`echo **/src`
 array=(${result///src/ })
 for var in ${array[@]}
 do
-echo "${var} == Module code is being scannedï¼ŒWaiting......"
-/Users/gaiyucheng/software/sonarQube/sonar-scanner-4.5.0.2216-macosx/bin/sonar-scanner -X \
--Dsonar.host.url=http://192.168.43.166:9000 \
--Dsonar.login=admin \
--Dsonar.password=admin \
--Dsonar.language=java \
--Dsonar.projectKey=glen-cloud \
--Dsonar.projectName=glen-cloud \
--Dsonar.projectVersion=$BUILD_NUMBER \
--Dsonar.sources=${var}/src/ \
--Dsonar.sourceEncoding=UTF-8 \
--Dsonar.java.binaries=${var}/target/
+echo "${var} == Module code is being scanned,ŒWaiting......"
+/Users/gaiyucheng/software/sonarQube/sonar-scanner-4.5.0.2216-macosx/bin/sonar-scanner -X -Dsonar.host.url=http://192.168.43.166:9000 -Dsonar.login=admin -Dsonar.password=admin -Dsonar.language=java -Dsonar.projectKey=glen-cloud -Dsonar.projectName=glen-cloud -Dsonar.projectVersion=$BUILD_NUMBER -Dsonar.sources=${var}/src/ -Dsonar.sourceEncoding=UTF-8 -Dsonar.java.binaries=${var}/target/
 echo "${var} == Module code has been scanned"
-echo "====================DiDiDiï¼ŒSplit Line===================="
+echo "====================DiDiDiï,ŒSplit Line===================="
 done
 '''
       }
