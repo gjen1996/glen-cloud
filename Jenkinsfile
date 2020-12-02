@@ -26,7 +26,7 @@ array=(${result///src/ })
 for var in ${array[@]}
 do
    echo $var
-/Users/gaiyucheng/software/sonarQube/sonar-scanner-4.5.0.2216-macosx/bin/sonar-scanner -X \\
+`/Users/gaiyucheng/software/sonarQube/sonar-scanner-4.5.0.2216-macosx/bin/sonar-scanner -X \\
 -Dsonar.host.url=http://192.168.43.166:9000 \\
 -Dsonar.login=admin \\
 -Dsonar.password=admin \\
@@ -36,7 +36,7 @@ do
 -Dsonar.projectVersion=$BUILD_NUMBER \\
 -Dsonar.sources=$var/src/ \\
 -Dsonar.sourceEncoding=UTF-8 \\
--Dsonar.java.binaries=$var/target/ \\
+-Dsonar.java.binaries=$var/target/ \\`
 done
 '''
       }
