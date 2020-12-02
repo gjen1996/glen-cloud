@@ -6,8 +6,8 @@ pipeline {
         git(url: 'https://github.com/gjen1996/glen-cloud.git', branch: 'master', changelog: true)
       }
     }
-    
-      stage('build') {
+
+    stage('build') {
       steps {
         tool 'Maven3.6'
         withMaven(maven: 'Maven3.6', jdk: 'openjdk11') {
