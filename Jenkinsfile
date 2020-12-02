@@ -22,12 +22,12 @@ mvn clean install -DskipTests'''
       steps {
         sh '''
 source ~/.bash_profile
-echo "SonarScanner代码静态检测已启动......"
+echo "SonarScanner is starting......"
 result=`echo **/src`
 array=(${result///src/ })
 for var in ${array[@]}
 do
-echo "当前开始扫描${var}模块代码，请稍后......"
+echo "${var} == Module code is being scanned，Waiting......"
 /Users/gaiyucheng/software/sonarQube/sonar-scanner-4.5.0.2216-macosx/bin/sonar-scanner -X \
 -Dsonar.host.url=http://192.168.43.166:9000 \
 -Dsonar.login=admin \
@@ -39,8 +39,8 @@ echo "当前开始扫描${var}模块代码，请稍后......"
 -Dsonar.sources=${var}/src/ \
 -Dsonar.sourceEncoding=UTF-8 \
 -Dsonar.java.binaries=${var}/target/
-echo "${var}模块静态代码已检测完毕"
-echo "====================滴滴滴，分割线===================="
+echo "${var} == Module code has been scanned"
+echo "====================DiDiDi，Split Line===================="
 done
 '''
       }
