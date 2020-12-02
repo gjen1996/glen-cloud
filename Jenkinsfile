@@ -20,23 +20,27 @@ mvn clean install -DskipTests'''
 
     stage('sonar') {
       steps {
-        sh '''pwd
+        sh '''
+source ~/.bash_profile
+echo "SonarScanner代码静态检测已启动......"
 result=`echo **/src`
 array=(${result///src/ })
 for var in ${array[@]}
 do
-   echo $var
-`/Users/gaiyucheng/software/sonarQube/sonar-scanner-4.5.0.2216-macosx/bin/sonar-scanner -X \\
--Dsonar.host.url=http://192.168.43.166:9000 \\
--Dsonar.login=admin \\
--Dsonar.password=admin \\
--Dsonar.language=java \\
--Dsonar.projectKey=glen-cloud \\
--Dsonar.projectName=glen-cloud \\
--Dsonar.projectVersion=$BUILD_NUMBER \\
--Dsonar.sources=$var/src/ \\
--Dsonar.sourceEncoding=UTF-8 \\
--Dsonar.java.binaries=$var/target/ \\`
+echo "当前开始扫描${var}模块代码，请稍后......"
+/Users/gaiyucheng/software/sonarQube/sonar-scanner-4.5.0.2216-macosx/bin/sonar-scanner -X \
+-Dsonar.host.url=http://192.168.43.166:9000 \
+-Dsonar.login=admin \
+-Dsonar.password=admin \
+-Dsonar.language=java \
+-Dsonar.projectKey=glen-cloud \
+-Dsonar.projectName=glen-cloud \
+-Dsonar.projectVersion=$BUILD_NUMBER \
+-Dsonar.sources=${var}/src/ \
+-Dsonar.sourceEncoding=UTF-8 \
+-Dsonar.java.binaries=${var}/target/
+echo "${var}模块静态代码已检测完毕"
+echo "====================滴滴滴，分割线===================="
 done
 '''
       }
