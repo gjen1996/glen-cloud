@@ -19,10 +19,10 @@ ls -al
 -Dsonar.projectKey=test-sonarqube \\
 -Dsonar.projectName=test-sonarqube \\
 -Dsonar.projectVersion=$BUILD_NUMBER \\
--Dsonar.sources=/**/src/ \\
+-Dsonar.sources=**/src/ \\
 -Dsonar.sourceEncoding=UTF-8 \\
--Dsonar.java.binaries=/**/target/ \\
--Dsonar.exclusions=/**/src/test/**
+-Dsonar.java.binaries=**/target/ \\
+-Dsonar.exclusions=**/src/test/**
 '''
       }
     }
