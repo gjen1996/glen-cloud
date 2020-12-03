@@ -11,8 +11,7 @@ pipeline {
       steps {
         tool 'Maven3.6'
         withMaven(maven: 'Maven3.6', jdk: 'openjdk11') {
-          sh '''cd glen-eureka
-mvn clean install -DskipTests'''
+          sh 'mvn clean install -DskipTests'
         }
 
       }
@@ -27,10 +26,10 @@ result=`echo **/src`
 array=(${result///src/ })
 for var in ${array[@]}
 do
-echo "${var} == Module code is being scanned,ŒWaiting......"
+echo "${var} == Module code is being scanned,Å’Waiting......"
 /Users/gaiyucheng/software/sonarQube/sonar-scanner-4.5.0.2216-macosx/bin/sonar-scanner -X -Dsonar.host.url=http://192.168.43.166:9000 -Dsonar.login=admin -Dsonar.password=admin -Dsonar.language=java -Dsonar.projectKey=glen-cloud -Dsonar.projectName=glen-cloud -Dsonar.projectVersion=$BUILD_NUMBER -Dsonar.sources=${var}/src/ -Dsonar.sourceEncoding=UTF-8 -Dsonar.java.binaries=${var}/target/
 echo "${var} == Module code has been scanned"
-echo "====================DiDiDiï,ŒSplit Line===================="
+echo "====================DiDiDiÃ¯,Å’Split Line===================="
 done
 '''
       }
