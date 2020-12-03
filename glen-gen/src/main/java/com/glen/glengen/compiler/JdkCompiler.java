@@ -1,7 +1,6 @@
 package com.glen.glengen.compiler;
 
 import com.google.common.collect.Lists;
-import com.sun.media.jfxmedia.logging.Logger;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.tools.*;
